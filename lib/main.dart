@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: signIn(),
+        home: SignUp(),
         // routes: {
         //   '/': (context) => splashScreen(),
         //   'signIn': (context) => signIn(),

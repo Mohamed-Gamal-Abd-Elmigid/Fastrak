@@ -16,25 +16,6 @@ class UserViewModel extends ChangeNotifier {
       "Accept-Language": "en",
     };
 
-    // Dio dio = Dio();
-    // // http.Response futurePost = await http.get(uuuri, headers: header);
-    // final response = await dio.post(
-    //   '$baseUrl$regist',
-    //   data: FormData.fromMap(
-    //     myUser.registerToJson(),
-    //   ),
-    //   options: Options(
-    //     headers: header,
-    //   ),
-    // );
-
-    // Map<String, String> body = {
-    //   "first_name": myUser.firstName,
-    //   "last_name": myUser.lastName,
-    //   "email": myUser.email,
-    //   "phone": myUser.phone,
-    // };
-
     Map<String, String> Profile = {
       "id": " ",
       "path": myUser.profilePicture.path == null
@@ -103,6 +84,35 @@ class UserViewModel extends ChangeNotifier {
     );
 
     notifyListeners();
+    return true;
+  }
+
+  Future<bool> validationError(User myUser) async {
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Accept-Language": "en",
+    };
+
+    Map<String, String> body = {
+      "phone": myUser.phone == null ? null : myUser.phone,
+      "email": myUser.email == null ? null : myUser.email,
+    };
+    var url = '$baseUrl/api/v1/user/auth/regular/register';
+    Uri uri = Uri.parse(url);
+    http.Response response = await http.post(
+      uri,
+      headers: header,
+      body: body,
+    );
+
+    print(" Test Vlidation");
+    print(response.body);
+    print("this is Token");
+    var token = json.decode(response.body)["data"]["access_token"];
+    print(token);
+
+    notifyListeners();
+
     return true;
   }
 }
