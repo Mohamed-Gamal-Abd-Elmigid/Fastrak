@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:loginscreen/enterpassword.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'validate.dart' as valid;
 import 'package:country_code_picker/country_code_picker.dart';
 // import 'package:font_awesome_flutter/fonts/';
 
-class signIn extends StatefulWidget {
+class SignIn extends StatefulWidget {
   // This widget is the root of your application.
   @override
-  _signInState createState() => _signInState();
+  _SignInState createState() => _SignInState();
 }
 
-class _signInState extends State<signIn> {
+class _SignInState extends State<SignIn> {
   final phoneKey = GlobalKey<FormState>();
 
   TextEditingController PhoneNumberController = TextEditingController();
+
+  String value;
+
+  savePref(String phone) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString("phone", phone);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,7 @@ class _signInState extends State<signIn> {
                       ),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.884,
-                        height: MediaQuery.of(context).size.height * 0.820,
+                        height: MediaQuery.of(context).size.height * 0.840,
                         decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
@@ -66,13 +75,13 @@ class _signInState extends State<signIn> {
                             children: [
                               Container(
                                 padding: EdgeInsets.only(
-                                  top: 25,
+                                  top: 15,
                                   left: 25,
                                   right: 25,
                                   bottom: 15,
                                 ),
                                 child: Image(
-                                  image: AssetImage('assets/profile.png'),
+                                  image: AssetImage('assets/password.png'),
                                   // fit: BoxFit.contain,
                                 ),
                               ),
@@ -137,6 +146,9 @@ class _signInState extends State<signIn> {
                                           child: Form(
                                             key: phoneKey,
                                             child: TextFormField(
+                                              onChanged: (text) {
+                                                value = text;
+                                              },
                                               controller: PhoneNumberController,
                                               decoration: InputDecoration(
                                                 focusedBorder:
@@ -240,17 +252,21 @@ class _signInState extends State<signIn> {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
                                             } else {
-                                              Provider.of<UserViewModel>(
-                                                context,
-                                                listen: false,
-                                              ).login(
-                                                phoneNumber:
-                                                    ("20-${PhoneNumberController.text}"),
-// email: "bank@intcore.net3",
-                                                password: "123123",
+                                              savePref(
+                                                  "20-${PhoneNumberController.text}");
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EnterPassword(
+                                                    value:
+                                                        ("20-${PhoneNumberController.text}"),
+                                                  ),
+                                                ),
                                               );
                                             }
                                           });
+                                          print(
+                                              "20-${PhoneNumberController.text}");
                                         },
                                         style: ButtonStyle(
                                           shape: MaterialStateProperty.all<
@@ -448,6 +464,15 @@ class _signInState extends State<signIn> {
                               SizedBox(
                                 height: 20,
                               ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom),
+                              ),
+                              // SizedBox(
+                              //   height: 20,
+                              // ),
                             ],
                           ),
                         ),

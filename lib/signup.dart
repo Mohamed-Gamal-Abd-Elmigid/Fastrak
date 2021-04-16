@@ -4,12 +4,16 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:loginscreen/Model/error.dart';
 import 'package:loginscreen/Model/user.dart';
 import 'package:loginscreen/signin.dart';
+import 'package:loginscreen/splashscreen.dart';
+import 'package:loginscreen/verficationcode.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'validate.dart' as valid;
 import 'Services/api.dart' as api;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -49,13 +53,18 @@ class _SignUpState extends State<SignUp> {
             height: MediaQuery.of(context).size.height * 0.066,
           ),
           leading: new IconButton(
-            icon: new Icon(
-              Icons.arrow_back_outlined,
-              color: Colors.black,
-              size: MediaQuery.of(context).size.width * 0.07,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
+              icon: new Icon(
+                Icons.arrow_back_outlined,
+                color: Colors.black,
+                size: MediaQuery.of(context).size.width * 0.07,
+              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => splashScreen(),
+                  ),
+                );
+              }),
           backgroundColor: Color(0xFFF9FAFF), //You can make this transparent
           elevation: 0.0, //No shadow
         ),
@@ -578,7 +587,7 @@ class _SignUpState extends State<SignUp> {
                                                   if (value.isEmpty) {
                                                     return "Requird";
                                                   } else if (value.length !=
-                                                      10) {
+                                                      11) {
                                                     return "Not Valid Number";
                                                   }
                                                 },
@@ -873,56 +882,49 @@ class _SignUpState extends State<SignUp> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(snackBar);
                                         } else {
-                                          if (ValidationError()) {
-                                            Provider.of<UserViewModel>(
-                                              context,
-                                              listen: false,
-                                            ).register(
-                                              User(
-                                                firstName:
-                                                    FirstNameController.text,
-                                                lastName:
-                                                    LastNameController.text,
-                                                email:
-                                                    EmaiAdressController.text,
-                                                phone:
-                                                    PhoneNumberController.text,
-                                                password:
-                                                    PasswordController.text,
-                                                company_name:
-                                                    CompanyNameController.text,
-                                                profilePicture: ProfilePicture(
-                                                    path: _imageFile.path),
+                                          // var isRegistered =
+                                          var isRegistered =
+                                              await Provider.of<UserViewModel>(
+                                            context,
+                                            listen: false,
+                                          ).register(
+                                            User(
+                                              firstName:
+                                                  FirstNameController.text,
+                                              lastName: LastNameController.text,
+                                              email: EmaiAdressController.text,
+                                              phone: PhoneNumberController.text,
+                                              password: PasswordController.text,
+                                              company_name:
+                                                  CompanyNameController.text,
+                                              profilePicture: ProfilePicture(
+                                                  path: _imageFile.path),
+                                            ),
+                                          );
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  VerficationCode(),
+                                            ),
+                                          );
+                                          SnackBar snackBar = SnackBar(
+                                            content: Text(
+                                              // isRegistered ?
+                                              // if(result == AccountCreated ){'Account Created' }
+                                              //   else id(result ==  )
+                                              'Account Created',
+
+                                              // : 'Failed to create',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold,
                                               ),
-                                            );
-                                            SnackBar snackBar = SnackBar(
-                                              content: Text(
-                                                'Account Created',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              duration: Duration(seconds: 2),
-                                              backgroundColor: Colors.grey,
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackBar);
-                                          } else {
-                                            SnackBar snackBar = SnackBar(
-                                              content: Text(
-                                                'Email Or Phone has already Takken',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              duration: Duration(seconds: 2),
-                                              backgroundColor: Colors.grey,
-                                            );
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(snackBar);
-                                          }
+                                            ),
+                                            duration: Duration(seconds: 2),
+                                            backgroundColor: Colors.grey,
+                                          );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackBar);
                                         }
                                       } else {
                                         SnackBar snackBar = SnackBar(
@@ -984,18 +986,36 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  bool ValidationError() {
-    Provider.of<UserViewModel>(
-      context,
-      listen: false,
-    ).validationError(
-      User(
-        email: EmaiAdressController.text,
-        phone: PhoneNumberController.text,
-      ),
-    );
-    return true;
-  }
+  // bool ValidationError() {
+  //   Provider.of<UserViewModel>(
+  //     context,
+  //     listen: false,
+  //   ).register(
+  //     User(
+  //       email: EmaiAdressController.text,
+  //       phone: PhoneNumberController.text,
+  //     ),
+  //   );
+  //
+  //   return true;
+  // }
+
+  //
+  // if (ValidationError()) {
+  // SnackBar snackBar = SnackBar(
+  // content: Text(
+  // 'Email Or Phone Numbwe is Token',
+  // style: TextStyle(
+  // color: Colors.black,
+  // fontWeight: FontWeight.bold,
+  // ),
+  // ),
+  // duration: Duration(seconds: 2),
+  // backgroundColor: Colors.grey,
+  // );
+  // ScaffoldMessenger.of(context)
+  //     .showSnackBar(snackBar);
+  // }
 
   void snakBar() {
     SnackBar snackBar = SnackBar(

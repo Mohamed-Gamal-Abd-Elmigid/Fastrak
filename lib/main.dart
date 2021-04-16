@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:loginscreen/enterpassword.dart';
+import 'package:loginscreen/newpassword.dart';
 import 'package:loginscreen/onBording.dart';
 import 'package:loginscreen/signin.dart';
 import 'package:loginscreen/signup.dart';
 import 'package:loginscreen/splashscreen.dart';
+import 'package:loginscreen/verficationcode.dart';
+import 'package:loginscreen/verficationcodelogin.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'validate.dart' as valid;
