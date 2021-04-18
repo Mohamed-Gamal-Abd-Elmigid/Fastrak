@@ -11,6 +11,7 @@ import 'package:loginscreen/splashscreen.dart';
 import 'package:loginscreen/verficationcode.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
+import 'Home.dart';
 import 'validate.dart' as valid;
 import 'Services/api.dart' as api;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +66,21 @@ class _SignUpState extends State<SignUp> {
                   ),
                 );
               }),
+          actions: [
+            FlatButton(
+              color: Colors.grey,
+              textColor: Colors.black,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => SignIn(),
+                  ),
+                );
+              },
+              child: Text("Sign In"),
+              shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+            ),
+          ],
           backgroundColor: Color(0xFFF9FAFF), //You can make this transparent
           elevation: 0.0, //No shadow
         ),
@@ -803,8 +819,6 @@ class _SignUpState extends State<SignUp> {
                                     children: [
                                       Container(
                                         child: Checkbox(
-                                          // borderRadius: BorderRadius.circular(10.0),
-
                                           value: _checkbox,
                                           activeColor:
                                               Color.fromARGB(255, 43, 54, 62),
@@ -867,20 +881,7 @@ class _SignUpState extends State<SignUp> {
 
                                       if (_checkbox) {
                                         if (!signup.currentState.validate()) {
-                                          print('Error in Forms');
-                                          SnackBar snackBar = SnackBar(
-                                            content: Text(
-                                              'Error Format',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            duration: Duration(seconds: 2),
-                                            backgroundColor: Colors.grey,
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
+                                          print("Error Format");
                                         } else {
                                           // var isRegistered =
                                           var isRegistered =
@@ -901,18 +902,25 @@ class _SignUpState extends State<SignUp> {
                                                   path: _imageFile.path),
                                             ),
                                           );
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  VerficationCode(),
-                                            ),
-                                          );
+                                          if (isRegistered) {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    VerficationCode(
+                                                  phoneNumber:
+                                                      "20-${PhoneNumberController.text}",
+                                                ),
+                                              ),
+                                            );
+                                          }
                                           SnackBar snackBar = SnackBar(
                                             content: Text(
                                               // isRegistered ?
                                               // if(result == AccountCreated ){'Account Created' }
                                               //   else id(result ==  )
-                                              'Account Created',
+                                              isRegistered
+                                                  ? 'Account Created'
+                                                  : "Account Already Exisits",
 
                                               // : 'Failed to create',
                                               style: TextStyle(
@@ -1016,18 +1024,6 @@ class _SignUpState extends State<SignUp> {
   // ScaffoldMessenger.of(context)
   //     .showSnackBar(snackBar);
   // }
-
-  void snakBar() {
-    SnackBar snackBar = SnackBar(
-      content: Text(
-        'You Have To Accept Terms and Conditions',
-      ),
-      duration: Duration(seconds: 1),
-      backgroundColor: Colors.grey,
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
 
   void imageProfile(BuildContext context) {
     showModalBottomSheet(

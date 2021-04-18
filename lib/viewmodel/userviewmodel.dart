@@ -13,7 +13,9 @@ enum RegistrationResult { AccountCreated, EmailAlreadyTaken, PhoneAlreadyTaken }
 class UserViewModel extends ChangeNotifier {
   User currentUser;
 
-  Future<RegistrationResult> register(User myUser) async {
+  Future<bool> register(User myUser) async {
+    bool isRegisterd;
+
     Map<String, String> header = {
       "Accept": "application/json",
       "Accept-Language": "en",
@@ -45,7 +47,7 @@ class UserViewModel extends ChangeNotifier {
       headers: header,
       body: body,
     );
-    RegistrationResult registerResult = null;
+
     if (response.statusCode == 200) {
       print(" Test TestTestTestTestTestTest");
       print(response.body);
@@ -53,36 +55,104 @@ class UserViewModel extends ChangeNotifier {
       //Save Token To Get The OTP Message
       var token = json.decode(response.body)["data"]["access_token"];
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      preferences.setString("access_token", token);
+      preferences.setString("token", token);
+      var email = json.decode(response.body)["data"]["email"];
+      preferences.setString("email", email);
+      var phone = json.decode(response.body)["data"]["phone"];
+      preferences.setString("phone", phone);
 
       print("this is Token And Saved Done");
       print(token);
-      registerResult = RegistrationResult.AccountCreated;
-    } else if (response.statusCode == 422) {
+      isRegisterd = true;
+    } else {
       print(response.body);
 
-      print("We try print error without zero");
+      print("We try print error without Error Type");
       var result = json.decode(response.body)["errors"];
 
-      // var decode = json.decode(source)
-
-      if (result == "phone") {
-        print(result);
-        registerResult = RegistrationResult.PhoneAlreadyTaken;
-      } else {
-        var email = json.decode(response.body)["errors"][1];
-        print(email);
-        registerResult = RegistrationResult.EmailAlreadyTaken;
-      }
+      print("This is Result After Printed");
+      print(result);
+      isRegisterd = false;
     }
-
     notifyListeners();
-    print(registerResult);
-
-    return registerResult;
+    return isRegisterd;
   }
 
+  //Registeration Using Enumeration
+  // Future<RegistrationResult> register(User myUser) async {
+  //   Map<String, String> header = {
+  //     "Accept": "application/json",
+  //     "Accept-Language": "en",
+  //   };
+  //
+  //   Map<String, String> Profile = {
+  //     "id": " ",
+  //     "path": myUser.profilePicture.path == null
+  //         ? null
+  //         : myUser.profilePicture.path,
+  //     "path_thumbnail": " ",
+  //     "mime_type": " ",
+  //     "custom_properties": " ",
+  //   };
+  //
+  //   Map<String, String> body = {
+  //     "password": myUser.password == null ? null : myUser.password,
+  //     "first_name": myUser.firstName == null ? null : myUser.firstName,
+  //     "last_name": myUser.lastName == null ? null : myUser.lastName,
+  //     "phone": myUser.phone == null ? null : myUser.phone,
+  //     "email": myUser.email == null ? null : myUser.email,
+  //     "company_name": myUser.company_name == null ? null : myUser.company_name,
+  //     "profile_picture": Profile.toString(),
+  //   };
+  //   var url = '$baseUrl/api/v1/user/auth/regular/register';
+  //   Uri uri = Uri.parse(url);
+  //   http.Response response = await http.post(
+  //     uri,
+  //     headers: header,
+  //     body: body,
+  //   );
+  //   RegistrationResult registerResult = null;
+  //   if (response.statusCode == 200) {
+  //     print(" Test TestTestTestTestTestTest");
+  //     print(response.body);
+  //
+  //     //Save Token To Get The OTP Message
+  //     var token = json.decode(response.body)["data"]["access_token"];
+  //     SharedPreferences preferences = await SharedPreferences.getInstance();
+  //     preferences.setString("access_token", token);
+  //
+  //     print("this is Token And Saved Done");
+  //     print(token);
+  //     registerResult = RegistrationResult.AccountCreated;
+  //   } else if (response.statusCode == 422) {
+  //     print(response.body);
+  //
+  //     print("We try print error without Error Type");
+  //     var result = json.decode(response.body)["errors"];
+  //
+  //     if (result == "phone") {
+  //       print("result From Phone");
+  //       print(result);
+  //       registerResult = RegistrationResult.PhoneAlreadyTaken;
+  //     } else if (result == "email") {
+  //       print("Ressult From Email");
+  //       var email = json.decode(response.body)["errors"][1];
+  //       print(email);
+  //       registerResult = RegistrationResult.EmailAlreadyTaken;
+  //     }
+  //     print("This is Result After Printed");
+  //     print(result);
+  //   }
+  //
+  //   notifyListeners();
+  //   // print(registerResult);
+  //
+  //   return registerResult;
+  // }
+
   Future<bool> login({String phoneNumber, String password}) async {
+    bool isLogIn;
+
     Map<String, String> header = {
       "Accept": "application/json",
       "Accept-Language": "en",
@@ -104,15 +174,25 @@ class UserViewModel extends ChangeNotifier {
     print(response.body);
 
     var token = json.decode(response.body)["data"]["access_token"];
+    var email = json.decode(response.body)["data"]["email"];
     print("this is My Token");
 
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString("token", token);
+    preferences.setString("phone", phoneNumber);
+    preferences.setString("email", email);
     print(token);
     currentUser = User.fromJson(
       jsonDecode(response.body),
     );
 
+    if (response.statusCode == 200) {
+      isLogIn = true;
+    } else {
+      isLogIn = false;
+    }
     notifyListeners();
-    return true;
+    return isLogIn;
   }
 
   //Forget PAssword Api
@@ -207,11 +287,6 @@ class UserViewModel extends ChangeNotifier {
 
   //For Registeration Form
   Future<bool> OTP(String code, String token) async {
-    //Loading The Token
-    String access_token;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    access_token = preferences.getString("access_token");
-
     Map<String, String> header = {
       "Accept": "application/json",
       "Accept-Language": "en",
@@ -233,6 +308,34 @@ class UserViewModel extends ChangeNotifier {
     print(" Test OTP");
     print(response.body);
     print("this is the OTP STATUS Code");
+    print(response.statusCode);
+
+    currentUser = User.fromJson(
+      jsonDecode(response.body),
+    );
+
+    notifyListeners();
+    return true;
+  }
+
+  Future<bool> logOut(String token) async {
+    //Loading The Token
+
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Authorization": "Bearer ${token}",
+    };
+
+    var url = '$baseUrl/api/v1/user/auth/logout';
+    Uri uri = Uri.parse(url);
+    http.Response response = await http.post(
+      uri,
+      headers: header,
+    );
+
+    print(" Test LogOut");
+    print(response.body);
+    print("this is LogOut Status Code");
     print(response.statusCode);
 
     currentUser = User.fromJson(

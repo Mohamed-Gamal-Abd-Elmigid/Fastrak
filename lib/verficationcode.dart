@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:loginscreen/Home.dart';
 import 'package:loginscreen/newpassword.dart';
 import 'package:loginscreen/splashscreen.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
@@ -20,20 +21,209 @@ class _VerficationCodeState extends State<VerficationCode> {
   String password;
   _VerficationCodeState({this.phoneNumber, this.password});
 
-  String access_token;
+  final otpKey = GlobalKey<FormState>();
+
+  TextEditingController firstNumber = TextEditingController();
+  TextEditingController secondNumber = TextEditingController();
+  TextEditingController thirdNumber = TextEditingController();
+  TextEditingController fourNumber = TextEditingController();
+  TextEditingController fiveNumber = TextEditingController();
+
+  FocusNode pin2FocusNode;
+  FocusNode pin3FocusNode;
+  FocusNode pin4FocusNode;
+  FocusNode pin5FocusNode;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getPref();
+    pin2FocusNode = FocusNode();
+    pin3FocusNode = FocusNode();
+    pin4FocusNode = FocusNode();
+    pin5FocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    pin2FocusNode.dispose();
+    pin3FocusNode.dispose();
+    pin4FocusNode.dispose();
+    pin5FocusNode.dispose();
+
+    super.dispose();
+  }
+
+  void nextField({String value, FocusNode focusNode}) {
+    if (value.length == 1) {
+      focusNode.requestFocus();
+    }
+  }
+
+  formOtp() {
+    return Form(
+      key: otpKey,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: 50,
+            height: 60,
+            child: TextFormField(
+              controller: firstNumber,
+              autofocus: true,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              decoration: InputDecoration(
+                hintText: '_',
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              onChanged: (value) {
+                nextField(value: value, focusNode: pin2FocusNode);
+              },
+              validator: (value) {
+                if (value.isEmpty) return "Required";
+              },
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            height: 60,
+            child: TextFormField(
+              controller: secondNumber,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              decoration: InputDecoration(
+                hintText: "_",
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              focusNode: pin2FocusNode,
+              onChanged: (value) {
+                nextField(value: value, focusNode: pin3FocusNode);
+              },
+              validator: (value) {
+                if (value.isEmpty) return "Required";
+              },
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            height: 60,
+            child: TextFormField(
+              controller: thirdNumber,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              decoration: InputDecoration(
+                hintText: "_",
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              focusNode: pin3FocusNode,
+              onChanged: (value) {
+                nextField(value: value, focusNode: pin4FocusNode);
+              },
+              validator: (value) {
+                if (value.isEmpty) return "Required";
+              },
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            height: 60,
+            child: TextFormField(
+              controller: fourNumber,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              decoration: InputDecoration(
+                hintText: "_",
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              focusNode: pin4FocusNode,
+              onChanged: (value) {
+                nextField(value: value, focusNode: pin5FocusNode);
+              },
+              validator: (value) {
+                if (value.isEmpty) return "Required";
+              },
+            ),
+          ),
+          SizedBox(
+            width: 50,
+            height: 60,
+            child: TextFormField(
+              controller: fiveNumber,
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+              decoration: InputDecoration(
+                hintText: "_",
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              focusNode: pin5FocusNode,
+              onChanged: (value) {
+                pin5FocusNode.unfocus();
+              },
+              validator: (value) {
+                if (value.isEmpty) return "Required";
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   String phone;
 
+  String token;
+
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     phone = preferences.getString("phone");
+    token = preferences.getString("token");
+    print("Token From Verfication  OTP Code ");
+    print(token);
+    print("----------------");
   }
 
   @override
@@ -70,7 +260,7 @@ class _VerficationCodeState extends State<VerficationCode> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.884,
-                      height: MediaQuery.of(context).size.height * 0.860,
+                      height: MediaQuery.of(context).size.height * 0.760,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -96,7 +286,7 @@ class _VerficationCodeState extends State<VerficationCode> {
                                 bottom: 15,
                               ),
                               child: Image(
-                                image: AssetImage('assets/profile.png'),
+                                image: AssetImage('assets/verf.png'),
                                 // fit: BoxFit.contain,
                               ),
                             ),
@@ -132,7 +322,7 @@ class _VerficationCodeState extends State<VerficationCode> {
                                     right: 10,
                                   ),
                                   child: Text(
-                                    'Code has been sent to +201123456789',
+                                    'Code has been sent to ${phoneNumber}',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 14,
@@ -155,19 +345,37 @@ class _VerficationCodeState extends State<VerficationCode> {
                                   children: [
                                     TweenAnimationBuilder(
                                       tween: Tween(begin: 30.0, end: 0),
-                                      duration: Duration(seconds: 40),
+                                      duration: Duration(seconds: 50),
                                       builder: (context, value, child) => Text(
                                         "00:${value.toInt()}",
                                         style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 16,
                                           color: Color(0xFF4B0082),
                                         ),
                                       ),
                                     ),
-                                    Text(
-                                      " Resend",
-                                      style: TextStyle(
-                                        color: Color(0xFF0FFCE93D8),
+                                    InkWell(
+                                      onTap: () {
+                                        print("HELLO RESEND");
+                                        TweenAnimationBuilder(
+                                          tween: Tween(begin: 40.0, end: 0),
+                                          duration: Duration(seconds: 40),
+                                          builder: (context, value, child) =>
+                                              Text(
+                                            "00:${value.toInt()}",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: Color(0xFF4B0082),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        " Resend",
+                                        style: TextStyle(
+                                          color: Color(0xFF0FFCE93D8),
+                                          fontSize: 16,
+                                        ),
                                       ),
                                     )
                                   ],
@@ -177,7 +385,7 @@ class _VerficationCodeState extends State<VerficationCode> {
                                     horizontal: 10,
                                     vertical: 20,
                                   ),
-                                  child: OtpFort(),
+                                  child: formOtp(),
                                 ),
                               ],
                             ),
@@ -187,19 +395,26 @@ class _VerficationCodeState extends State<VerficationCode> {
                               height: 60,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  bool result =
-                                      await Provider.of<UserViewModel>(
-                                    context,
-                                    listen: false,
-                                  ).OTP(
-                                    "123456",
-                                    access_token,
-                                  );
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => splashScreen(),
-                                    ),
-                                  );
+                                  if (!otpKey.currentState.validate()) {
+                                    print("Error Format");
+                                  } else {
+                                    var sendOTP =
+                                        "${firstNumber.text}${secondNumber.text}${thirdNumber.text}${fourNumber.text}${fiveNumber.text}";
+
+                                    bool result =
+                                        await Provider.of<UserViewModel>(
+                                      context,
+                                      listen: false,
+                                    ).OTP(
+                                      "123456",
+                                      token,
+                                    );
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => Home(),
+                                      ),
+                                    );
+                                  }
                                 },
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all<
@@ -221,9 +436,6 @@ class _VerficationCodeState extends State<VerficationCode> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
 
                             Padding(
                               padding: EdgeInsets.only(
@@ -243,176 +455,6 @@ class _VerficationCodeState extends State<VerficationCode> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class OtpFort extends StatefulWidget {
-  @override
-  _OtpFortState createState() => _OtpFortState();
-}
-
-class _OtpFortState extends State<OtpFort> {
-  FocusNode pin2FocusNode;
-  FocusNode pin3FocusNode;
-  FocusNode pin4FocusNode;
-  FocusNode pin5FocusNode;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    pin2FocusNode = FocusNode();
-    pin3FocusNode = FocusNode();
-    pin4FocusNode = FocusNode();
-    pin5FocusNode = FocusNode();
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    pin2FocusNode.dispose();
-    pin3FocusNode.dispose();
-    pin4FocusNode.dispose();
-    pin5FocusNode.dispose();
-
-    super.dispose();
-  }
-
-  void nextField({String value, FocusNode focusNode}) {
-    if (value.length == 1) {
-      focusNode.requestFocus();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: 50,
-            height: 60,
-            child: TextFormField(
-              autofocus: true,
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              style: TextStyle(
-                fontSize: 24,
-              ),
-              decoration: InputDecoration(
-                hintText: '_',
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              onChanged: (value) {
-                nextField(value: value, focusNode: pin2FocusNode);
-              },
-            ),
-          ),
-          SizedBox(
-            width: 50,
-            height: 60,
-            child: TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              style: TextStyle(
-                fontSize: 24,
-              ),
-              decoration: InputDecoration(
-                hintText: "_",
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              focusNode: pin2FocusNode,
-              onChanged: (value) {
-                nextField(value: value, focusNode: pin3FocusNode);
-              },
-            ),
-          ),
-          SizedBox(
-            width: 50,
-            height: 60,
-            child: TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              style: TextStyle(
-                fontSize: 24,
-              ),
-              decoration: InputDecoration(
-                hintText: "_",
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              focusNode: pin3FocusNode,
-              onChanged: (value) {
-                nextField(value: value, focusNode: pin4FocusNode);
-              },
-            ),
-          ),
-          SizedBox(
-            width: 50,
-            height: 60,
-            child: TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              style: TextStyle(
-                fontSize: 24,
-              ),
-              decoration: InputDecoration(
-                hintText: "_",
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              focusNode: pin4FocusNode,
-              onChanged: (value) {
-                nextField(value: value, focusNode: pin5FocusNode);
-              },
-            ),
-          ),
-          SizedBox(
-            width: 50,
-            height: 60,
-            child: TextFormField(
-              textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              style: TextStyle(
-                fontSize: 24,
-              ),
-              decoration: InputDecoration(
-                hintText: "_",
-                enabledBorder: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              focusNode: pin5FocusNode,
-              onChanged: (value) {
-                pin5FocusNode.unfocus();
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

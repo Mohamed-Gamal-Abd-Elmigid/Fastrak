@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:loginscreen/verficationcode.dart';
 import 'package:loginscreen/verficationcodelogin.dart';
+import 'package:loginscreen/Home.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +26,7 @@ class _EnterPasswordState extends State<EnterPassword> {
   TextEditingController passwordController = TextEditingController();
 
   String phone;
+  String forgetformat;
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -32,6 +34,9 @@ class _EnterPasswordState extends State<EnterPassword> {
     print("Phone From Enter PAssword");
     print(phone);
     print("----------------");
+    forgetformat = preferences.getString("forgetformat");
+    print("That what is back from forgetformat");
+    print(forgetformat);
   }
 
   @override
@@ -164,56 +169,59 @@ class _EnterPasswordState extends State<EnterPassword> {
                                 SizedBox(
                                   height: 5,
                                 ),
-                                Container(
-                                  width:
-                                      MediaQuery.of(context).size.width / 1.1,
-                                  height:
-                                      MediaQuery.of(context).size.height / 13,
-                                  child: TextFormField(
-                                    textInputAction: TextInputAction.done,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
+                                Form(
+                                  key: passwordKey,
+                                  child: Container(
+                                    // width:
+                                    //     MediaQuery.of(context).size.width / 1.1,
+                                    // height:
+                                    //     MediaQuery.of(context).size.height / 13,
+                                    child: TextFormField(
+                                      textInputAction: TextInputAction.done,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 20,
+                                      ),
+                                      obscureText: true,
+                                      controller: passwordController,
+                                      decoration: InputDecoration(
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.black,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                            const Radius.circular(10.0),
+                                          ),
+                                        ),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 20, horizontal: 20),
+                                        hintText: '*************',
+                                        hintStyle: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 17,
+                                        ),
+                                        errorStyle: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                        ),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Colors.teal,
+                                          ),
+                                          borderRadius: const BorderRadius.all(
+                                            const Radius.circular(10.0),
+                                          ),
+                                        ),
+                                      ),
+                                      validator: (value) {
+                                        if (value.isEmpty)
+                                          return "Required";
+                                        else if (value.length < 5) {
+                                          return "Not Valid";
+                                        }
+                                      },
                                     ),
-                                    obscureText: true,
-                                    controller: passwordController,
-                                    decoration: InputDecoration(
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.black,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                          const Radius.circular(10.0),
-                                        ),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 20),
-                                      hintText: '*************',
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 17,
-                                      ),
-                                      errorStyle: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 13,
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.teal,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                          const Radius.circular(10.0),
-                                        ),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value.isEmpty)
-                                        return "Required";
-                                      else if (value.length < 4) {
-                                        return "week password";
-                                      }
-                                    },
                                   ),
                                 ),
                                 SizedBox(
@@ -228,16 +236,14 @@ class _EnterPasswordState extends State<EnterPassword> {
                                         listen: false,
                                       ).forgetPassword(
                                         User(
-                                          phone: value,
+                                          phone: forgetformat,
                                         ),
                                       );
 
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              loginVerficationCode(
-                                            phoneNumber: value,
-                                          ),
+                                              loginVerficationCode(),
                                         ),
                                       );
                                     },
@@ -257,14 +263,59 @@ class _EnterPasswordState extends State<EnterPassword> {
                                   width: MediaQuery.of(context).size.width,
                                   height: 60,
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      Provider.of<UserViewModel>(
-                                        context,
-                                        listen: false,
-                                      ).login(
-                                        phoneNumber: phone,
-                                        password: passwordController.text,
-                                      );
+                                    onPressed: () async {
+                                      // var isSignIn = true;
+
+                                      if (!passwordKey.currentState
+                                          .validate()) {
+                                        print("Error In Writing password");
+                                      } else {
+                                        await Provider.of<UserViewModel>(
+                                          context,
+                                          listen: false,
+                                        ).login(
+                                          phoneNumber: forgetformat,
+                                          password: passwordController.text,
+                                        );
+
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) => Home(),
+                                          ),
+                                        );
+                                      }
+
+                                      // if (isSignIn) {
+                                      //   SnackBar snackBar = SnackBar(
+                                      //     content: Text(
+                                      //       'Yes True ',
+                                      //       style: TextStyle(
+                                      //         color: Colors.black,
+                                      //         fontWeight: FontWeight.bold,
+                                      //       ),
+                                      //     ),
+                                      //     duration: Duration(seconds: 2),
+                                      //     backgroundColor: Colors.grey,
+                                      //   );
+                                      //
+                                      //   ScaffoldMessenger.of(context)
+                                      //       .showSnackBar(snackBar);
+                                      // } else {
+                                      //   SnackBar snackBar = SnackBar(
+                                      //     content: Text(
+                                      //       'You Have To Accept Terms and Conditions',
+                                      //       style: TextStyle(
+                                      //         color: Colors.black,
+                                      //         fontWeight: FontWeight.bold,
+                                      //       ),
+                                      //     ),
+                                      //     duration: Duration(seconds: 2),
+                                      //     backgroundColor: Colors.grey,
+                                      //   );
+                                      //
+                                      //   ScaffoldMessenger.of(context)
+                                      //       .showSnackBar(snackBar);
+                                      // }
                                     },
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all<

@@ -45,170 +45,198 @@ class _OnBoardingState extends State<OnBoarding> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Color.fromRGBO(219, 219, 219, 1),
         body: SafeArea(
-          child: Center(
+          child: Container(
+            color: Color(0xFFF9FAFF),
             child: Column(
               children: [
-                SizedBox(
-                  height: 20,
-                ),
                 Image(
                   image: AssetImage('assets/logo.png'),
                   width: MediaQuery.of(context).size.width * 0.35,
                   height: MediaQuery.of(context).size.height * 0.066,
                 ),
                 SizedBox(
-                  height: 40.0,
+                  height: 30,
                 ),
-                Container(
-                  // color: Color.fromRGBO(249, 250, 255, 1),
-                  height: MediaQuery.of(context).size.height / 1.8,
-                  width: MediaQuery.of(context).size.width * 0.88,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.884,
+                    height: MediaQuery.of(context).size.height * 0.650,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade300,
+                          blurRadius: 20.0, // soften the shadow
+                          spreadRadius: 1.0,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                      color: Color(0xFFFFFFFF),
                     ),
-                    color: Colors.white70,
-                  ),
-                  child: PageView(
-                    physics: ClampingScrollPhysics(),
-                    controller: _pageController,
-                    onPageChanged: (int page) {
-                      setState(() {
-                        _currentPage = page;
-                      });
-                    },
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Image(
-                                image: AssetImage('assets/onboard.png'),
-                                height: 300,
-                                width: 300,
+                    child: Column(
+                      children: [
+                        Container(
+                          // color: Color.fromRGBO(249, 250, 255, 1),
+                          height: MediaQuery.of(context).size.height * 0.600,
+                          width: MediaQuery.of(context).size.width * 0.788,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20),
+                            ),
+                            color: Colors.white70,
+                          ),
+                          child: PageView(
+                            physics: ClampingScrollPhysics(),
+                            controller: _pageController,
+                            onPageChanged: (int page) {
+                              setState(() {
+                                _currentPage = page;
+                              });
+                            },
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                      top: 25,
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 15,
+                                    ),
+                                    child: Image(
+                                      image: AssetImage('assets/onboard.png'),
+                                      // fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  Text(
+                                    'User-friendly',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    'From Registering An Account With'
+                                    ' Fastrak To Tracking Your Parcel,'
+                                    ' We Ensure A Friendly And Easy-To-Use '
+                                    'Application.',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'User-friendly',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                      top: 25,
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 15,
+                                    ),
+                                    child: Image(
+                                      image: AssetImage('assets/onboard.png'),
+                                      // fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Screen Two',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    'From Registering An Account With'
+                                    ' Fastrak To Tracking Your Parcel,'
+                                    ' We Ensure A Friendly And Easy-To-Use '
+                                    'Application.',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'From Registering An Account With Fastrak To Tracking Your Parcel, We Ensure A Friendly And Easy-To-Use Application.',
-                            ),
-                          ],
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                      top: 25,
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 15,
+                                    ),
+                                    child: Image(
+                                      image: AssetImage('assets/onboard.png'),
+                                      // fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Screen Three',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    'From Registering An Account With'
+                                    ' Fastrak To Tracking Your Parcel,'
+                                    ' We Ensure A Friendly And Easy-To-Use '
+                                    'Application.',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                      top: 25,
+                                      left: 15,
+                                      right: 15,
+                                      bottom: 15,
+                                    ),
+                                    child: Image(
+                                      image: AssetImage('assets/onboard.png'),
+                                      // fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Screen Four',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    'From Registering An Account With'
+                                    ' Fastrak To Tracking Your Parcel,'
+                                    ' We Ensure A Friendly And Easy-To-Use '
+                                    'Application.',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Image(
-                                image: AssetImage('assets/onboard.png'),
-                                height: 300,
-                                width: 300,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'Second Screen',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'From Registering An Account With Fastrak To Tracking Your Parcel, We Ensure A Friendly And Easy-To-Use Application.',
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Image(
-                                image: AssetImage('assets/onboard.png'),
-                                height: 300,
-                                width: 300,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'Third Screen',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'From Registering An Account With Fastrak To Tracking Your Parcel, We Ensure A Friendly And Easy-To-Use Application.',
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Center(
-                              child: Image(
-                                image: AssetImage('assets/onboard.png'),
-                                height: 300,
-                                width: 300,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'Fouth Screen',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            Text(
-                              'From Registering An Account With Fastrak To Tracking Your Parcel, We Ensure A Friendly And Easy-To-Use Application.',
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
-                  height: 40.0,
+                  height: 20,
                 ),
                 Container(
                   height: 15,
@@ -218,7 +246,7 @@ class _OnBoardingState extends State<OnBoarding> {
                   ),
                 ),
                 SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.44,
@@ -231,8 +259,8 @@ class _OnBoardingState extends State<OnBoarding> {
                         ),
                       ),
                       backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromRGBO(235, 235, 235, 1),
-                        // Color.fromARGB(75, 0, 130, 1),
+                        // Color.fromRGBO(75, 0, 130, 210),
+                        Colors.deepPurple.shade100,
                       ),
                     ),
                     onPressed: () {
@@ -246,7 +274,7 @@ class _OnBoardingState extends State<OnBoarding> {
                       'Skip',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.purple,
+                        color: Color(0XFF4B0082),
                         fontSize: 20,
                       ),
                     ),

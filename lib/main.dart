@@ -7,6 +7,7 @@ import 'package:loginscreen/signup.dart';
 import 'package:loginscreen/splashscreen.dart';
 import 'package:loginscreen/verficationcode.dart';
 import 'package:loginscreen/verficationcodelogin.dart';
+import 'package:loginscreen/Home.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'validate.dart' as valid;
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SignUp(),
+        home: SignIn(),
         // routes: {
         //   '/': (context) => splashScreen(),
         //   'signIn': (context) => signIn(),

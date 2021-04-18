@@ -17,10 +17,14 @@ class _NewPasswordState extends State<NewPassword> {
 
   String phone;
 
+  String forgetformat;
+
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    phone = preferences.getString("phone");
-    print("Phone From New Password and password confirmation  is ${phone} ");
+    forgetformat = preferences.getString("forgetformat");
+
+    print(
+        "Phone From New Password and password confirmation  is ${forgetformat} ");
   }
 
   @override
@@ -62,7 +66,7 @@ class _NewPasswordState extends State<NewPassword> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.884,
-                    height: MediaQuery.of(context).size.height * 0.840,
+                    height: MediaQuery.of(context).size.height * 0.770,
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -88,7 +92,7 @@ class _NewPasswordState extends State<NewPassword> {
                               bottom: 15,
                             ),
                             child: Image(
-                              image: AssetImage('assets/password.png'),
+                              image: AssetImage('assets/repas.png'),
                               // fit: BoxFit.contain,
                             ),
                           ),
@@ -268,7 +272,9 @@ class _NewPasswordState extends State<NewPassword> {
                                           await Provider.of<UserViewModel>(
                                                   context,
                                                   listen: false)
-                                              .newPassword(phone, "123456",
+                                              .newPassword(
+                                                  forgetformat,
+                                                  "123456",
                                                   PasswordController.text);
 
                                           SnackBar snackBar = SnackBar(
@@ -312,16 +318,16 @@ class _NewPasswordState extends State<NewPassword> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 5,
-                                  ),
+                                  // SizedBox(
+                                  //   height: 5,
+                                  // ),
                                 ],
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 8,
-                          ),
+                          // SizedBox(
+                          //   height: 8,
+                          // ),
                           Padding(
                             padding: EdgeInsets.only(
                                 bottom:

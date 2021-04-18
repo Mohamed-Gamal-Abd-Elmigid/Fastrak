@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:loginscreen/enterpassword.dart';
+import 'package:loginscreen/splashscreen.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:splashscreen/splashscreen.dart';
 import 'validate.dart' as valid;
 import 'package:country_code_picker/country_code_picker.dart';
 // import 'package:font_awesome_flutter/fonts/';
@@ -20,9 +22,10 @@ class _SignInState extends State<SignIn> {
 
   String value;
 
-  savePref(String phone) async {
+  savePref(String phone, String forgetformat) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString("phone", phone);
+    preferences.setString("forgetformat", forgetformat);
   }
 
   @override
@@ -213,10 +216,9 @@ class _SignInState extends State<SignIn> {
                                               validator: (value) {
                                                 if (value.isEmpty) {
                                                   return "Requird";
+                                                } else if (value.length < 10) {
+                                                  return "Not Valid Number";
                                                 }
-                                                // else if (value.length < 10) {
-                                                //   return "Not Valid Number";
-                                                // }
                                               },
                                             ),
                                           ),
@@ -233,40 +235,23 @@ class _SignInState extends State<SignIn> {
                                       height: 60,
                                       child: ElevatedButton(
                                         onPressed: () {
-                                          setState(() {
-                                            if (!phoneKey.currentState
-                                                .validate()) {
-                                              print("Error Format");
-// return;
-                                              SnackBar snackBar = SnackBar(
-                                                content: Text(
-                                                  'Error Format',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                          if (!phoneKey.currentState
+                                              .validate()) {
+                                            print("Error Format");
+                                          } else {
+                                            savePref(
+                                                "20-${PhoneNumberController.text}",
+                                                "${PhoneNumberController.text}");
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EnterPassword(
+                                                  value:
+                                                      ("20-${PhoneNumberController.text}"),
                                                 ),
-                                                duration: Duration(seconds: 2),
-                                                backgroundColor: Colors.grey,
-                                              );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
-                                            } else {
-                                              savePref(
-                                                  "20-${PhoneNumberController.text}");
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EnterPassword(
-                                                    value:
-                                                        ("20-${PhoneNumberController.text}"),
-                                                  ),
-                                                ),
-                                              );
-                                            }
-                                          });
-                                          print(
-                                              "20-${PhoneNumberController.text}");
+                                              ),
+                                            );
+                                          }
                                         },
                                         style: ButtonStyle(
                                           shape: MaterialStateProperty.all<
@@ -447,10 +432,14 @@ class _SignInState extends State<SignIn> {
                                       borderRadius:
                                           new BorderRadius.circular(10.0)),
                                   onPressed: () {
-                                    Navigator.pop(context);
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => splashScreen(),
+                                      ),
+                                    );
                                   },
                                   child: Text(
-                                    'Continue As Guest',
+                                    'Back To Start',
                                     style: TextStyle(
                                       fontFamily: 'Segoe-UI-Bold',
                                       fontWeight: FontWeight.w700,
