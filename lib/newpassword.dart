@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loginscreen/enterpassword.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,14 @@ class _NewPasswordState extends State<NewPassword> {
             ),
             width: MediaQuery.of(context).size.width * 0.35,
             height: MediaQuery.of(context).size.height * 0.066,
+          ),
+          leading: new IconButton(
+            icon: new Icon(
+              Icons.arrow_back_outlined,
+              color: Colors.black,
+              size: MediaQuery.of(context).size.width * 0.07,
+            ),
+            onPressed: () => Navigator.of(context).pop(),
           ),
           backgroundColor: Color(0xFFF9FAFF), //You can make this transparent
           elevation: 0.0, //No shadow
@@ -276,24 +285,14 @@ class _NewPasswordState extends State<NewPassword> {
                                                   forgetformat,
                                                   "123456",
                                                   PasswordController.text);
-
-                                          SnackBar snackBar = SnackBar(
-                                            content: Text(
-                                              'Error Format',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            duration: Duration(seconds: 2),
-                                            backgroundColor: Colors.grey,
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EnterPassword()),
+                                          Fluttertoast.showToast(
+                                            msg: "Password Changed",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.black,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0,
                                           );
                                         }
                                       },

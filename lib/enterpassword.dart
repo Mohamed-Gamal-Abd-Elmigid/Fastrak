@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loginscreen/verficationcode.dart';
 import 'package:loginscreen/verficationcodelogin.dart';
 import 'package:loginscreen/Home.dart';
@@ -120,8 +121,6 @@ class _EnterPasswordState extends State<EnterPassword> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Container(
-                                // width: MediaQuery.of(context).size.width / 4,
-                                // height: MediaQuery.of(context).size.height / 25,
                                 height: MediaQuery.of(context).size.height / 25,
                                 child: Text(
                                   'ENTER YOUR PASSWORD',
@@ -270,52 +269,88 @@ class _EnterPasswordState extends State<EnterPassword> {
                                           .validate()) {
                                         print("Error In Writing password");
                                       } else {
-                                        await Provider.of<UserViewModel>(
+                                        var result =
+                                            await Provider.of<UserViewModel>(
                                           context,
                                           listen: false,
                                         ).login(
                                           phoneNumber: forgetformat,
                                           password: passwordController.text,
                                         );
+                                        if (result) {
+                                          Fluttertoast.showToast(
+                                            msg: "Sucess",
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.black,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0,
+                                          );
+                                          print("Sucess");
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) => Home(),
+                                            ),
+                                          );
+                                        } else {
+                                          Fluttertoast.showToast(
+                                            msg: "Invalid Password",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0,
+                                          );
+                                        }
 
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) => Home(),
-                                          ),
-                                        );
+                                        //
+                                        // Fluttertoast.showToast(
+                                        // msg:
+                                        // "This is Center Short Toast",
+                                        // toastLength:
+                                        // Toast.LENGTH_SHORT,
+                                        // gravity:
+                                        // ToastGravity.BOTTOM,
+                                        // timeInSecForIosWeb: 1,
+                                        // backgroundColor:
+                                        // Colors.grey,
+                                        // textColor: Colors.white,
+                                        // fontSize: 16.0);
+
+                                        // if (isSignIn) {
+                                        //   SnackBar snackBar = SnackBar(
+                                        //     content: Text(
+                                        //       'Yes True ',
+                                        //       style: TextStyle(
+                                        //         color: Colors.black,
+                                        //         fontWeight: FontWeight.bold,
+                                        //       ),
+                                        //     ),
+                                        //     duration: Duration(seconds: 2),
+                                        //     backgroundColor: Colors.grey,
+                                        //   );
+                                        //
+                                        //   ScaffoldMessenger.of(context)
+                                        //       .showSnackBar(snackBar);
+                                        // } else {
+                                        //   SnackBar snackBar = SnackBar(
+                                        //     content: Text(
+                                        //       'You Have To Accept Terms and Conditions',
+                                        //       style: TextStyle(
+                                        //         color: Colors.black,
+                                        //         fontWeight: FontWeight.bold,
+                                        //       ),
+                                        //     ),
+                                        //     duration: Duration(seconds: 2),
+                                        //     backgroundColor: Colors.grey,
+                                        //   );
+                                        //
+                                        //   ScaffoldMessenger.of(context)
+                                        //       .showSnackBar(snackBar);
+                                        // }
                                       }
-
-                                      // if (isSignIn) {
-                                      //   SnackBar snackBar = SnackBar(
-                                      //     content: Text(
-                                      //       'Yes True ',
-                                      //       style: TextStyle(
-                                      //         color: Colors.black,
-                                      //         fontWeight: FontWeight.bold,
-                                      //       ),
-                                      //     ),
-                                      //     duration: Duration(seconds: 2),
-                                      //     backgroundColor: Colors.grey,
-                                      //   );
-                                      //
-                                      //   ScaffoldMessenger.of(context)
-                                      //       .showSnackBar(snackBar);
-                                      // } else {
-                                      //   SnackBar snackBar = SnackBar(
-                                      //     content: Text(
-                                      //       'You Have To Accept Terms and Conditions',
-                                      //       style: TextStyle(
-                                      //         color: Colors.black,
-                                      //         fontWeight: FontWeight.bold,
-                                      //       ),
-                                      //     ),
-                                      //     duration: Duration(seconds: 2),
-                                      //     backgroundColor: Colors.grey,
-                                      //   );
-                                      //
-                                      //   ScaffoldMessenger.of(context)
-                                      //       .showSnackBar(snackBar);
-                                      // }
                                     },
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all<

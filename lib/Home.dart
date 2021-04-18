@@ -63,14 +63,6 @@ class _HomeState extends State<Home> {
             width: MediaQuery.of(context).size.width * 0.35,
             height: MediaQuery.of(context).size.height * 0.066,
           ),
-          leading: new IconButton(
-            icon: new Icon(
-              Icons.arrow_back_outlined,
-              color: Colors.black,
-              size: MediaQuery.of(context).size.width * 0.07,
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
           backgroundColor: Color(0xFFF9FAFF), //You can make this transparent
           elevation: 0.0, //No shadow
         ),

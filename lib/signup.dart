@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loginscreen/Model/error.dart';
 import 'package:loginscreen/Model/user.dart';
@@ -903,6 +904,15 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                           );
                                           if (isRegistered) {
+                                            Fluttertoast.showToast(
+                                              msg: "Account Created",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.grey,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0,
+                                            );
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder: (context) =>
@@ -912,27 +922,17 @@ class _SignUpState extends State<SignUp> {
                                                 ),
                                               ),
                                             );
+                                          } else {
+                                            Fluttertoast.showToast(
+                                              msg: "Already Exist",
+                                              toastLength: Toast.LENGTH_SHORT,
+                                              gravity: ToastGravity.BOTTOM,
+                                              timeInSecForIosWeb: 1,
+                                              backgroundColor: Colors.black,
+                                              textColor: Colors.white,
+                                              fontSize: 16.0,
+                                            );
                                           }
-                                          SnackBar snackBar = SnackBar(
-                                            content: Text(
-                                              // isRegistered ?
-                                              // if(result == AccountCreated ){'Account Created' }
-                                              //   else id(result ==  )
-                                              isRegistered
-                                                  ? 'Account Created'
-                                                  : "Account Already Exisits",
-
-                                              // : 'Failed to create',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            duration: Duration(seconds: 2),
-                                            backgroundColor: Colors.grey,
-                                          );
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackBar);
                                         }
                                       } else {
                                         SnackBar snackBar = SnackBar(

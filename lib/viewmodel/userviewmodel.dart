@@ -68,7 +68,7 @@ class UserViewModel extends ChangeNotifier {
       print(response.body);
 
       print("We try print error without Error Type");
-      var result = json.decode(response.body)["errors"];
+      var result = json.decode(response.body)["errors"][0]["message"];
 
       print("This is Result After Printed");
       print(result);
@@ -170,27 +170,28 @@ class UserViewModel extends ChangeNotifier {
       body: body,
     );
 
-    print(" Test What Back From Login");
+    if (response.statusCode == 200) {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      var token = json.decode(response.body)["data"]["access_token"];
+      var email = json.decode(response.body)["data"]["email"];
+      preferences.setString("token", token);
+      preferences.setString("phone", phoneNumber);
+      preferences.setString("email", email);
+      print("this is My Token");
+
+      print(token);
+      isLogIn = true;
+    } else {
+      var error = json.decode(response.body)["errors"];
+      print(error);
+      isLogIn = false;
+    }
     print(response.body);
 
-    var token = json.decode(response.body)["data"]["access_token"];
-    var email = json.decode(response.body)["data"]["email"];
-    print("this is My Token");
-
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString("token", token);
-    preferences.setString("phone", phoneNumber);
-    preferences.setString("email", email);
-    print(token);
     currentUser = User.fromJson(
       jsonDecode(response.body),
     );
 
-    if (response.statusCode == 200) {
-      isLogIn = true;
-    } else {
-      isLogIn = false;
-    }
     notifyListeners();
     return isLogIn;
   }

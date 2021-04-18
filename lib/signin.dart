@@ -8,6 +8,7 @@ import 'package:splashscreen/splashscreen.dart';
 import 'validate.dart' as valid;
 import 'package:country_code_picker/country_code_picker.dart';
 // import 'package:font_awesome_flutter/fonts/';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignIn extends StatefulWidget {
   // This widget is the root of your application.
@@ -84,7 +85,7 @@ class _SignInState extends State<SignIn> {
                                   bottom: 15,
                                 ),
                                 child: Image(
-                                  image: AssetImage('assets/password.png'),
+                                  image: AssetImage('assets/login.png'),
                                   // fit: BoxFit.contain,
                                 ),
                               ),
@@ -216,7 +217,8 @@ class _SignInState extends State<SignIn> {
                                               validator: (value) {
                                                 if (value.isEmpty) {
                                                   return "Requird";
-                                                } else if (value.length < 10) {
+                                                } else if (value.length < 10 ||
+                                                    value.length > 11) {
                                                   return "Not Valid Number";
                                                 }
                                               },
