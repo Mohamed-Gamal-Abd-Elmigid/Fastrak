@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loginscreen/enterpassword.dart';
+import 'package:loginscreen/loading.dart';
+import 'package:loginscreen/newEnterPasswod.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NewPassword extends StatefulWidget {
+class newNewPassword extends StatefulWidget {
   @override
-  _NewPasswordState createState() => _NewPasswordState();
+  _newNewPasswordState createState() => _newNewPasswordState();
 }
 
-class _NewPasswordState extends State<NewPassword> {
+class _newNewPasswordState extends State<newNewPassword> {
   final passwordKey = GlobalKey<FormState>();
 
   TextEditingController PasswordController = TextEditingController();
@@ -19,6 +21,8 @@ class _NewPasswordState extends State<NewPassword> {
   String phone;
 
   String forgetformat;
+
+  bool isLoading = false;
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -50,7 +54,7 @@ class _NewPasswordState extends State<NewPassword> {
               'assets/logo.png',
             ),
             width: MediaQuery.of(context).size.width * 0.35,
-            height: MediaQuery.of(context).size.height * 0.066,
+            height: MediaQuery.of(context).size.height * 0.026,
           ),
           leading: new IconButton(
             icon: new Icon(
@@ -95,9 +99,9 @@ class _NewPasswordState extends State<NewPassword> {
                         children: [
                           Container(
                             padding: EdgeInsets.only(
-                              top: 35,
-                              left: 35,
-                              right: 35,
+                              top: 25,
+                              left: 45,
+                              right: 45,
                               bottom: 15,
                             ),
                             child: Image(
@@ -116,7 +120,7 @@ class _NewPasswordState extends State<NewPassword> {
                                     style: TextStyle(
                                       fontFamily: 'SegoeUI',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20,
+                                      fontSize: 19,
                                     ),
                                   )),
                               SizedBox(
@@ -137,7 +141,7 @@ class _NewPasswordState extends State<NewPassword> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                              top: 20.0,
+                              top: 15.0,
                               left: 10,
                               right: 10,
                             ),
@@ -159,6 +163,7 @@ class _NewPasswordState extends State<NewPassword> {
                                     height: 5,
                                   ),
                                   TextFormField(
+                                    textAlignVertical: TextAlignVertical.bottom,
                                     textInputAction: TextInputAction.next,
                                     style: TextStyle(
                                       color: Colors.black,
@@ -176,7 +181,7 @@ class _NewPasswordState extends State<NewPassword> {
                                         ),
                                       ),
                                       contentPadding: EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 20),
+                                          vertical: 15, horizontal: 10),
                                       hintText: '*************',
                                       hintStyle: TextStyle(
                                         color: Colors.grey,
@@ -205,7 +210,7 @@ class _NewPasswordState extends State<NewPassword> {
                                     },
                                   ),
                                   SizedBox(
-                                    height: 20.0,
+                                    height: 10.0,
                                   ),
                                   Align(
                                     alignment: Alignment.centerLeft,
@@ -221,6 +226,7 @@ class _NewPasswordState extends State<NewPassword> {
                                     height: 5,
                                   ),
                                   TextFormField(
+                                    textAlignVertical: TextAlignVertical.bottom,
                                     textInputAction: TextInputAction.next,
                                     style: TextStyle(
                                       color: Colors.black,
@@ -238,7 +244,7 @@ class _NewPasswordState extends State<NewPassword> {
                                         ),
                                       ),
                                       contentPadding: EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 20),
+                                          vertical: 15, horizontal: 10),
                                       hintText: '*************',
                                       hintStyle: TextStyle(
                                         color: Colors.grey,
@@ -270,14 +276,19 @@ class _NewPasswordState extends State<NewPassword> {
                                   SizedBox(
                                     height: 15.0,
                                   ),
+                                  isLoading ? Loading() : Container(),
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width,
-                                    height: 60,
+                                    height:
+                                        MediaQuery.of(context).size.height / 14,
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (passwordKey.currentState
                                             .validate()) {
                                           print('Error in Forms');
+                                          setState(() {
+                                            isLoading = true;
+                                          });
                                           await Provider.of<UserViewModel>(
                                                   context,
                                                   listen: false)
@@ -285,6 +296,9 @@ class _NewPasswordState extends State<NewPassword> {
                                                   forgetformat,
                                                   "123456",
                                                   PasswordController.text);
+                                          setState(() {
+                                            isLoading = false;
+                                          });
                                           Fluttertoast.showToast(
                                             msg: "Password Changed",
                                             toastLength: Toast.LENGTH_SHORT,
@@ -297,7 +311,7 @@ class _NewPasswordState extends State<NewPassword> {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  EnterPassword(),
+                                                  newEnterPassword(),
                                             ),
                                           );
                                         } else {

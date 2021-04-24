@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loginscreen/Home.dart';
@@ -16,9 +18,11 @@ class VerficationCode extends StatefulWidget {
   _VerficationCodeState createState() => _VerficationCodeState();
 }
 
-class _VerficationCodeState extends State<VerficationCode> {
+class _VerficationCodeState extends State<VerficationCode>
+    with SingleTickerProviderStateMixin {
   String phoneNumber;
   String password;
+
   _VerficationCodeState({this.phoneNumber, this.password});
 
   final otpKey = GlobalKey<FormState>();
@@ -28,7 +32,8 @@ class _VerficationCodeState extends State<VerficationCode> {
   TextEditingController thirdNumber = TextEditingController();
   TextEditingController fourNumber = TextEditingController();
   TextEditingController fiveNumber = TextEditingController();
-
+  // AnimationController _timerController;
+  Animation _animation;
   FocusNode pin2FocusNode;
   FocusNode pin3FocusNode;
   FocusNode pin4FocusNode;
@@ -38,6 +43,8 @@ class _VerficationCodeState extends State<VerficationCode> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    startTimer();
     getPref();
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
@@ -45,9 +52,52 @@ class _VerficationCodeState extends State<VerficationCode> {
     pin5FocusNode = FocusNode();
   }
 
+  Timer _timer;
+  int _start = 20;
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
+  void startNewTimer() {
+    _start = 20;
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
+  clearPin() {}
+
   @override
   void dispose() {
     // TODO: implement dispose
+    _timer.cancel();
     pin2FocusNode.dispose();
     pin3FocusNode.dispose();
     pin4FocusNode.dispose();
@@ -72,6 +122,7 @@ class _VerficationCodeState extends State<VerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: firstNumber,
               autofocus: true,
               textAlign: TextAlign.center,
@@ -81,6 +132,11 @@ class _VerficationCodeState extends State<VerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: '_',
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -100,6 +156,7 @@ class _VerficationCodeState extends State<VerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: secondNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -108,6 +165,11 @@ class _VerficationCodeState extends State<VerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -128,6 +190,7 @@ class _VerficationCodeState extends State<VerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: thirdNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -136,6 +199,11 @@ class _VerficationCodeState extends State<VerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -156,6 +224,7 @@ class _VerficationCodeState extends State<VerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: fourNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -164,6 +233,11 @@ class _VerficationCodeState extends State<VerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -184,6 +258,7 @@ class _VerficationCodeState extends State<VerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.done,
               controller: fiveNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -192,6 +267,11 @@ class _VerficationCodeState extends State<VerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -343,41 +423,29 @@ class _VerficationCodeState extends State<VerficationCode> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    TweenAnimationBuilder(
-                                      tween: Tween(begin: 30.0, end: 0),
-                                      duration: Duration(seconds: 50),
-                                      builder: (context, value, child) => Text(
-                                        "00:${value.toInt()}",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xFF4B0082),
-                                        ),
+                                    Text(
+                                      "0.$_start",
+                                      style: TextStyle(
+                                        fontSize: 18,
                                       ),
                                     ),
-                                    InkWell(
+                                    GestureDetector(
                                       onTap: () {
-                                        print("HELLO RESEND");
-                                        TweenAnimationBuilder(
-                                          tween: Tween(begin: 40.0, end: 0),
-                                          duration: Duration(seconds: 40),
-                                          builder: (context, value, child) =>
-                                              Text(
-                                            "00:${value.toInt()}",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Color(0xFF4B0082),
-                                            ),
-                                          ),
-                                        );
+                                        print("HEllo");
+                                        startNewTimer();
+                                        Provider.of<UserViewModel>(
+                                          context,
+                                          listen: false,
+                                        ).resendOtp(token);
                                       },
                                       child: Text(
                                         " Resend",
                                         style: TextStyle(
                                           color: Color(0xFF0FFCE93D8),
-                                          fontSize: 16,
+                                          fontSize: 26,
                                         ),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                                 Padding(
@@ -435,6 +503,9 @@ class _VerficationCodeState extends State<VerficationCode> {
                                   ),
                                 ),
                               ),
+                            ),
+                            SizedBox(
+                              height: 20,
                             ),
 
                             Padding(

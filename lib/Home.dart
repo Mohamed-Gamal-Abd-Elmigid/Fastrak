@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loginscreen/loading.dart';
+import 'package:loginscreen/newSignIn.dart';
 import 'package:loginscreen/signin.dart';
 import 'package:loginscreen/signup.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
@@ -40,12 +42,15 @@ class _HomeState extends State<Home> {
     print(phone);
 
     print("----------------");
+
+    loading = false;
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    setState(() => loading = true);
     getPref();
   }
 
@@ -92,21 +97,18 @@ class _HomeState extends State<Home> {
                             context,
                             listen: false,
                           ).logOut(token);
-                          SnackBar snackBar = SnackBar(
-                            content: Text(
-                              'LogOut Completed',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            duration: Duration(seconds: 2),
+                          Fluttertoast.showToast(
+                            msg: "Logout Completed",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
                             backgroundColor: Colors.grey,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
                           );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => SignIn(),
+                              builder: (context) => newSignIn(),
                             ),
                           );
                         },

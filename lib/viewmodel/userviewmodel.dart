@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:loginscreen/Model/error.dart';
 import 'package:loginscreen/Model/user.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +13,7 @@ enum RegistrationResult { AccountCreated, EmailAlreadyTaken, PhoneAlreadyTaken }
 
 class UserViewModel extends ChangeNotifier {
   User currentUser;
+  bool isFound;
 
   Future<bool> register(User myUser) async {
     bool isRegisterd;
@@ -23,9 +25,7 @@ class UserViewModel extends ChangeNotifier {
 
     Map<String, String> Profile = {
       "id": " ",
-      "path": myUser.profilePicture.path == null
-          ? null
-          : myUser.profilePicture.path,
+      // "path": myUser.profilePicture.path,
       "path_thumbnail": " ",
       "mime_type": " ",
       "custom_properties": " ",
@@ -78,78 +78,6 @@ class UserViewModel extends ChangeNotifier {
     return isRegisterd;
   }
 
-  //Registeration Using Enumeration
-  // Future<RegistrationResult> register(User myUser) async {
-  //   Map<String, String> header = {
-  //     "Accept": "application/json",
-  //     "Accept-Language": "en",
-  //   };
-  //
-  //   Map<String, String> Profile = {
-  //     "id": " ",
-  //     "path": myUser.profilePicture.path == null
-  //         ? null
-  //         : myUser.profilePicture.path,
-  //     "path_thumbnail": " ",
-  //     "mime_type": " ",
-  //     "custom_properties": " ",
-  //   };
-  //
-  //   Map<String, String> body = {
-  //     "password": myUser.password == null ? null : myUser.password,
-  //     "first_name": myUser.firstName == null ? null : myUser.firstName,
-  //     "last_name": myUser.lastName == null ? null : myUser.lastName,
-  //     "phone": myUser.phone == null ? null : myUser.phone,
-  //     "email": myUser.email == null ? null : myUser.email,
-  //     "company_name": myUser.company_name == null ? null : myUser.company_name,
-  //     "profile_picture": Profile.toString(),
-  //   };
-  //   var url = '$baseUrl/api/v1/user/auth/regular/register';
-  //   Uri uri = Uri.parse(url);
-  //   http.Response response = await http.post(
-  //     uri,
-  //     headers: header,
-  //     body: body,
-  //   );
-  //   RegistrationResult registerResult = null;
-  //   if (response.statusCode == 200) {
-  //     print(" Test TestTestTestTestTestTest");
-  //     print(response.body);
-  //
-  //     //Save Token To Get The OTP Message
-  //     var token = json.decode(response.body)["data"]["access_token"];
-  //     SharedPreferences preferences = await SharedPreferences.getInstance();
-  //     preferences.setString("access_token", token);
-  //
-  //     print("this is Token And Saved Done");
-  //     print(token);
-  //     registerResult = RegistrationResult.AccountCreated;
-  //   } else if (response.statusCode == 422) {
-  //     print(response.body);
-  //
-  //     print("We try print error without Error Type");
-  //     var result = json.decode(response.body)["errors"];
-  //
-  //     if (result == "phone") {
-  //       print("result From Phone");
-  //       print(result);
-  //       registerResult = RegistrationResult.PhoneAlreadyTaken;
-  //     } else if (result == "email") {
-  //       print("Ressult From Email");
-  //       var email = json.decode(response.body)["errors"][1];
-  //       print(email);
-  //       registerResult = RegistrationResult.EmailAlreadyTaken;
-  //     }
-  //     print("This is Result After Printed");
-  //     print(result);
-  //   }
-  //
-  //   notifyListeners();
-  //   // print(registerResult);
-  //
-  //   return registerResult;
-  // }
-
   Future<bool> login({String phoneNumber, String password}) async {
     bool isLogIn;
 
@@ -182,11 +110,10 @@ class UserViewModel extends ChangeNotifier {
       print(token);
       isLogIn = true;
     } else {
-      var error = json.decode(response.body)["errors"];
+      var error = json.decode(response.body)["errors"][0]["message"];
       print(error);
       isLogIn = false;
     }
-    print(response.body);
 
     currentUser = User.fromJson(
       jsonDecode(response.body),
@@ -194,6 +121,44 @@ class UserViewModel extends ChangeNotifier {
 
     notifyListeners();
     return isLogIn;
+  }
+
+  // Check user already Exist
+  Future<bool> check(String phone) async {
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Accept-Language": "en",
+    };
+
+    Map<String, String> body = {
+      "phone": phone == null ? null : phone,
+    };
+    var url = '$baseUrl/api/v1/user/auth/regular/check-user';
+    Uri uri = Uri.parse(url);
+    http.Response response = await http.post(
+      uri,
+      headers: header,
+      body: body,
+    );
+
+    print(" Test Already Exist APi");
+    if (response.statusCode == 200) {
+      print(response.body);
+      var result = json.decode(response.body)["data"]["is_exist"];
+      print(result);
+      print(response.statusCode);
+      isFound = true;
+    } else {
+      print(response.body);
+      print(response.statusCode);
+      var result = json.decode(response.body)["errors"][0]["message"];
+      print(result);
+      isFound = false;
+    }
+
+    notifyListeners();
+
+    return isFound;
   }
 
   //Forget PAssword Api
@@ -216,12 +181,22 @@ class UserViewModel extends ChangeNotifier {
     );
 
     print(" Test Forget PAssword APi");
-    print(response.body);
-    print(response.statusCode);
+    if (response.statusCode == 200) {
+      print(response.body);
+      print(response.statusCode);
+      isFound = true;
+    } else {
+      print(response.body);
+      // var body = json.decode(response.body);
+      // print(body);
+      print(response.statusCode);
+
+      isFound = false;
+    }
 
     notifyListeners();
 
-    return true;
+    return isFound;
   }
 
   //CONFIRM User code as otp came from login
@@ -319,6 +294,36 @@ class UserViewModel extends ChangeNotifier {
     return true;
   }
 
+  //For Resend otp in regiteration
+  Future<bool> resendOtp(String token) async {
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Authorization": "Bearer ${token}",
+    };
+
+    var url = '$baseUrl/api/v1/user/auth/activate';
+    Uri uri = Uri.parse(url);
+    http.Response response = await http.post(
+      uri,
+      headers: header,
+    );
+
+    print(" Test Resend OTP");
+    print(response.body);
+    print("this is the OTP STATUS Code");
+    print(response.statusCode);
+
+    currentUser = User.fromJson(
+      jsonDecode(response.body),
+    );
+
+    notifyListeners();
+    return true;
+  }
+
+  //For Logout
+
   Future<bool> logOut(String token) async {
     //Loading The Token
 
@@ -346,4 +351,40 @@ class UserViewModel extends ChangeNotifier {
     notifyListeners();
     return true;
   }
+
+  //login with facebook
+
+  // Future<Null> _login() async {
+  //   final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+  //
+  //   switch (result.status) {
+  //     case FacebookLoginStatus.loggedIn:
+  //       final FacebookAccessToken accessToken = result.accessToken;
+  //       _showMessage('''
+  //        Logged in!
+  //
+  //        Token: ${accessToken.token}
+  //        User id: ${accessToken.userId}
+  //        Expires: ${accessToken.expires}
+  //        Permissions: ${accessToken.permissions}
+  //        Declined permissions: ${accessToken.declinedPermissions}
+  //        ''');
+  //       break;
+  //     case FacebookLoginStatus.cancelledByUser:
+  //       _showMessage('Login cancelled by the user.');
+  //       break;
+  //     case FacebookLoginStatus.error:
+  //       _showMessage('Something went wrong with the login process.\n'
+  //           'Here\'s the error Facebook gave us: ${result.errorMessage}');
+  //       break;
+  //   }
+  // }
+
+  //logout with facebook
+
+  // Future<Null> _logOut() async {
+  //   await facebookSignIn.logOut();
+  //   _showMessage('Logged out.');
+  // }
+
 }

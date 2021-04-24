@@ -32,12 +32,18 @@ class _EnterPasswordState extends State<EnterPassword> {
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     phone = preferences.getString("phone");
-    print("Phone From Enter PAssword");
-    print(phone);
-    print("----------------");
     forgetformat = preferences.getString("forgetformat");
-    print("That what is back from forgetformat");
-    print(forgetformat);
+  }
+
+  provider() async {
+    await Provider.of<UserViewModel>(
+      context,
+      listen: false,
+    ).forgetPassword(
+      User(
+        phone: forgetformat,
+      ),
+    );
   }
 
   @override
@@ -107,9 +113,9 @@ class _EnterPasswordState extends State<EnterPassword> {
                         children: [
                           Container(
                             padding: EdgeInsets.only(
-                              top: 25,
-                              left: 25,
-                              right: 25,
+                              top: 35,
+                              left: 35,
+                              right: 35,
                               bottom: 15,
                             ),
                             child: Image(
@@ -171,10 +177,6 @@ class _EnterPasswordState extends State<EnterPassword> {
                                 Form(
                                   key: passwordKey,
                                   child: Container(
-                                    // width:
-                                    //     MediaQuery.of(context).size.width / 1.1,
-                                    // height:
-                                    //     MediaQuery.of(context).size.height / 13,
                                     child: TextFormField(
                                       textInputAction: TextInputAction.done,
                                       style: TextStyle(
@@ -228,17 +230,9 @@ class _EnterPasswordState extends State<EnterPassword> {
                                 ),
                                 Align(
                                   alignment: Alignment.topRight,
-                                  child: InkWell(
+                                  child: GestureDetector(
                                     onTap: () {
-                                      Provider.of<UserViewModel>(
-                                        context,
-                                        listen: false,
-                                      ).forgetPassword(
-                                        User(
-                                          phone: forgetformat,
-                                        ),
-                                      );
-
+                                      provider();
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
@@ -299,7 +293,7 @@ class _EnterPasswordState extends State<EnterPassword> {
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.BOTTOM,
                                             timeInSecForIosWeb: 1,
-                                            backgroundColor: Colors.grey,
+                                            backgroundColor: Colors.black,
                                             textColor: Colors.white,
                                             fontSize: 16.0,
                                           );
@@ -377,6 +371,11 @@ class _EnterPasswordState extends State<EnterPassword> {
                                   height: 20,
                                 ),
                               ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).viewInsets.bottom,
                             ),
                           ),
                         ],

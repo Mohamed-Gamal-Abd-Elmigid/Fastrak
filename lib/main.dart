@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:loginscreen/enterpassword.dart';
+import 'package:loginscreen/logintest.dart';
+import 'package:loginscreen/newEnterPasswod.dart';
+import 'package:loginscreen/newNewPassword.dart';
+import 'package:loginscreen/newSignIn.dart';
+import 'package:loginscreen/newSignUp.dart';
+import 'package:loginscreen/newSignUpVerf.dart';
 import 'package:loginscreen/newpassword.dart';
 import 'package:loginscreen/onBording.dart';
 import 'package:loginscreen/signin.dart';
@@ -10,6 +16,7 @@ import 'package:loginscreen/verficationcodelogin.dart';
 import 'package:loginscreen/Home.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
+import 'newLoginVerf.dart';
 import 'validate.dart' as valid;
 import 'package:country_code_picker/country_code_picker.dart';
 // import 'package:font_awesome_flutter/fonts/';
@@ -34,11 +41,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SignIn(),
-        // routes: {
-        //   '/': (context) => splashScreen(),
-        //   'signIn': (context) => signIn(),
-        // },
+        home: newSignUp(),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:loginscreen/newpassword.dart';
@@ -34,10 +36,52 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
     print("Phone From Verfication is ${phone} ");
   }
 
+  Timer _timer;
+  int _start = 40;
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
+  void startNewTimer() {
+    _start = 20;
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          setState(() {
+            timer.cancel();
+          });
+        } else {
+          setState(() {
+            _start--;
+          });
+        }
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    startTimer();
+
     getPref();
     pin2FocusNode = FocusNode();
     pin3FocusNode = FocusNode();
@@ -48,6 +92,8 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _timer.cancel();
+
     pin2FocusNode.dispose();
     pin3FocusNode.dispose();
     pin4FocusNode.dispose();
@@ -72,6 +118,7 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: firstNumber,
               autofocus: true,
               textAlign: TextAlign.center,
@@ -81,6 +128,11 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: '_',
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -100,6 +152,7 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: secondNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -108,6 +161,11 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -128,6 +186,7 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: thirdNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -136,6 +195,11 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -156,6 +220,7 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.next,
               controller: fourNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -164,6 +229,11 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -184,6 +254,7 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
             width: 50,
             height: 60,
             child: TextFormField(
+              textInputAction: TextInputAction.done,
               controller: fiveNumber,
               textAlign: TextAlign.center,
               keyboardType: TextInputType.number,
@@ -192,6 +263,11 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
               ),
               decoration: InputDecoration(
                 hintText: "_",
+                errorStyle: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 10,
+                ),
                 enabledBorder: OutlineInputBorder(),
                 focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(
@@ -243,7 +319,7 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.884,
-                      height: MediaQuery.of(context).size.height * 0.760,
+                      height: MediaQuery.of(context).size.height * 0.820,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -263,7 +339,7 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
                           children: [
                             Container(
                               padding: EdgeInsets.only(
-                                top: 25,
+                                top: 35,
                                 left: 25,
                                 right: 25,
                                 bottom: 15,
@@ -326,36 +402,21 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    TweenAnimationBuilder(
-                                      tween: Tween(begin: 40.0, end: 0),
-                                      duration: Duration(seconds: 40),
-                                      builder: (context, value, child) => Text(
-                                        "00:${value.toInt()}",
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          color: Color(0xFF4B0082),
-                                        ),
+                                    Text(
+                                      "0.$_start",
+                                      style: TextStyle(
+                                        fontSize: 18,
                                       ),
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        TweenAnimationBuilder(
-                                          tween: Tween(begin: 40.0, end: 0),
-                                          duration: Duration(seconds: 40),
-                                          builder: (context, value, child) =>
-                                              Text(
-                                            "00:${value.toInt()}",
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color(0xFF4B0082),
-                                            ),
-                                          ),
-                                        );
+                                        startNewTimer();
                                       },
                                       child: Text(
                                         " Resend",
                                         style: TextStyle(
                                           color: Color(0xFF0FFCE93D8),
+                                          fontSize: 16,
                                         ),
                                       ),
                                     )
@@ -369,6 +430,9 @@ class _loginVerficationCodeState extends State<loginVerficationCode> {
                                   child: formOtp(),
                                 ),
                               ],
+                            ),
+                            SizedBox(
+                              height: 20,
                             ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width / 1.7,

@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loginscreen/Model/error.dart';
 import 'package:loginscreen/Model/user.dart';
+import 'package:loginscreen/newSignIn.dart';
+import 'package:loginscreen/newSignUpVerf.dart';
 import 'package:loginscreen/signin.dart';
 import 'package:loginscreen/splashscreen.dart';
 import 'package:loginscreen/verficationcode.dart';
@@ -17,12 +19,12 @@ import 'validate.dart' as valid;
 import 'Services/api.dart' as api;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignUp extends StatefulWidget {
+class newSignUp extends StatefulWidget {
   @override
-  _SignUpState createState() => _SignUpState();
+  _newSignUpState createState() => _newSignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _newSignUpState extends State<newSignUp> {
   TextEditingController FirstNameController = TextEditingController();
   TextEditingController LastNameController = TextEditingController();
   TextEditingController EmaiAdressController = TextEditingController();
@@ -66,36 +68,20 @@ class _SignUpState extends State<SignUp> {
               'assets/logo.png',
             ),
             width: MediaQuery.of(context).size.width * 0.35,
-            height: MediaQuery.of(context).size.height * 0.066,
+            height: MediaQuery.of(context).size.height * 0.026,
           ),
           leading: new IconButton(
-              icon: new Icon(
-                Icons.arrow_back_outlined,
-                color: Colors.black,
-                size: MediaQuery.of(context).size.width * 0.07,
-              ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => splashScreen(),
-                  ),
-                );
-              }),
-          actions: [
-            FlatButton(
-              color: Colors.grey,
-              textColor: Colors.black,
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => SignIn(),
-                  ),
-                );
-              },
-              child: Text("Sign In"),
-              shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+            icon: new Icon(
+              Icons.arrow_back_outlined,
+              color: Colors.black,
+              size: MediaQuery.of(context).size.width * 0.07,
             ),
-          ],
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => newSignIn(),
+              ),
+            ),
+          ),
           backgroundColor: Color(0xFFF9FAFF), //You can make this transparent
           elevation: 0.0, //No shadow
         ),
@@ -137,7 +123,7 @@ class _SignUpState extends State<SignUp> {
                                 Container(
                                   padding: EdgeInsets.only(
                                     left: 20,
-                                    top: 20,
+                                    top: 15,
                                     right: 20,
                                   ),
                                   child: Form(
@@ -159,7 +145,7 @@ class _SignUpState extends State<SignUp> {
                                                 style: TextStyle(
                                                   fontFamily: 'SegoeUI',
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 24,
+                                                  fontSize: 22,
                                                 ),
                                               ),
                                             ),
@@ -167,7 +153,7 @@ class _SignUpState extends State<SignUp> {
                                               height: MediaQuery.of(context)
                                                       .size
                                                       .height /
-                                                  100,
+                                                  200,
                                             ),
                                             Container(
                                               // padding: EdgeInsets.only(top: 10),
@@ -175,7 +161,7 @@ class _SignUpState extends State<SignUp> {
                                               width: MediaQuery.of(context)
                                                       .size
                                                       .width /
-                                                  7,
+                                                  8,
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.all(
                                                   Radius.circular(20),
@@ -196,11 +182,11 @@ class _SignUpState extends State<SignUp> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.336,
+                                                    0.306,
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height *
-                                                    0.197,
+                                                    0.167,
                                                 decoration: BoxDecoration(
                                                   // shape: BoxShape.circle,
                                                   borderRadius:
@@ -220,11 +206,11 @@ class _SignUpState extends State<SignUp> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.287,
+                                                    0.257,
                                                 height: MediaQuery.of(context)
                                                         .size
                                                         .height *
-                                                    0.170,
+                                                    0.140,
                                                 decoration: BoxDecoration(
                                                   shape: BoxShape.rectangle,
                                                   borderRadius:
@@ -343,7 +329,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                             contentPadding:
                                                 EdgeInsets.symmetric(
-                                              vertical: 20,
+                                              vertical: 15,
                                               horizontal: 20,
                                             ),
                                             hintText: 'First Name',
@@ -374,7 +360,7 @@ class _SignUpState extends State<SignUp> {
                                           },
                                         ),
                                         SizedBox(
-                                          height: 20,
+                                          height: 10,
                                         ),
                                         //Last Name
                                         Align(
@@ -409,7 +395,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                             contentPadding:
                                                 EdgeInsets.symmetric(
-                                                    vertical: 20,
+                                                    vertical: 15,
                                                     horizontal: 20),
                                             hintText: 'Last Name',
                                             hintStyle: TextStyle(
@@ -440,7 +426,7 @@ class _SignUpState extends State<SignUp> {
                                           },
                                         ),
                                         SizedBox(
-                                          height: 20,
+                                          height: 10,
                                         ),
                                         //Email Address
                                         Align(
@@ -475,7 +461,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                             contentPadding:
                                                 EdgeInsets.symmetric(
-                                                    vertical: 20,
+                                                    vertical: 15,
                                                     horizontal: 20),
                                             hintText: 'user_name@gmail.com',
                                             hintStyle: TextStyle(
@@ -508,7 +494,7 @@ class _SignUpState extends State<SignUp> {
                                           },
                                         ),
                                         SizedBox(
-                                          height: 20,
+                                          height: 10,
                                         ),
                                         //Phone Number
 
@@ -594,7 +580,7 @@ class _SignUpState extends State<SignUp> {
                                                   ),
                                                   contentPadding:
                                                       EdgeInsets.symmetric(
-                                                          vertical: 20,
+                                                          vertical: 18,
                                                           horizontal: 20),
                                                   hintText: '11234567890',
                                                   hintStyle: TextStyle(
@@ -627,7 +613,7 @@ class _SignUpState extends State<SignUp> {
                                           ],
                                         ),
                                         SizedBox(
-                                          height: 20,
+                                          height: 10,
                                         ),
 
                                         //Company Name
@@ -663,7 +649,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                             contentPadding:
                                                 EdgeInsets.symmetric(
-                                                    vertical: 20,
+                                                    vertical: 15,
                                                     horizontal: 20),
                                             hintText: 'Company Name',
                                             hintStyle: TextStyle(
@@ -688,7 +674,7 @@ class _SignUpState extends State<SignUp> {
                                           controller: CompanyNameController,
                                         ),
                                         SizedBox(
-                                          height: 20,
+                                          height: 10,
                                         ),
                                         //Password
                                         Align(
@@ -726,7 +712,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                             contentPadding:
                                                 EdgeInsets.symmetric(
-                                                    vertical: 20,
+                                                    vertical: 15,
                                                     horizontal: 20),
                                             hintText: '*************',
                                             hintStyle: TextStyle(
@@ -757,7 +743,7 @@ class _SignUpState extends State<SignUp> {
                                           },
                                         ),
                                         SizedBox(
-                                          height: 20,
+                                          height: 10,
                                         ),
                                         //Confirm Password
                                         Align(
@@ -795,7 +781,7 @@ class _SignUpState extends State<SignUp> {
                                             ),
                                             contentPadding:
                                                 EdgeInsets.symmetric(
-                                                    vertical: 20,
+                                                    vertical: 15,
                                                     horizontal: 20),
                                             hintText: '*************',
                                             hintStyle: TextStyle(
@@ -929,10 +915,7 @@ class _SignUpState extends State<SignUp> {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    VerficationCode(
-                                                  phoneNumber:
-                                                      "20-${PhoneNumberController.text}",
-                                                ),
+                                                    signUpPinCodeVerificationScreen(),
                                               ),
                                             );
                                           } else {

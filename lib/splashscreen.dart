@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loginscreen/newSignUp.dart';
 import 'package:loginscreen/onBording.dart';
 import 'package:loginscreen/signin.dart';
 import 'package:loginscreen/signup.dart';
@@ -14,7 +15,7 @@ class _splashScreenState extends State<splashScreen> {
   Widget build(BuildContext context) {
     return SplashScreenView(
       imageSrc: "assets/splash.png",
-      home: SignUp(),
+      home: newSignUp(),
       duration: 4,
       backgroundColor: Colors.purple,
       imageSize: 30,

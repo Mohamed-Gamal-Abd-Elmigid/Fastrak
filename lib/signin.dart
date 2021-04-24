@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loginscreen/enterpassword.dart';
+import 'package:loginscreen/loading.dart';
+import 'package:loginscreen/signup.dart';
 import 'package:loginscreen/splashscreen.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'Model/user.dart';
 import 'validate.dart' as valid;
 import 'package:country_code_picker/country_code_picker.dart';
-// import 'package:font_awesome_flutter/fonts/';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as JSON;
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SignIn extends StatefulWidget {
   // This widget is the root of your application.
@@ -22,6 +28,8 @@ class _SignInState extends State<SignIn> {
   TextEditingController PhoneNumberController = TextEditingController();
 
   String value;
+
+  bool isflag = true;
 
   savePref(String phone, String forgetformat) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -79,9 +87,9 @@ class _SignInState extends State<SignIn> {
                             children: [
                               Container(
                                 padding: EdgeInsets.only(
-                                  top: 15,
-                                  left: 25,
-                                  right: 25,
+                                  top: 35,
+                                  left: 35,
+                                  right: 35,
                                   bottom: 15,
                                 ),
                                 child: Image(
@@ -178,7 +186,7 @@ class _SignInState extends State<SignIn> {
                                                         showFlag: false,
                                                         alignLeft: false,
                                                         textStyle: TextStyle(
-                                                          fontSize: 17,
+                                                          fontSize: 15,
                                                           color: Colors.black,
                                                         ),
                                                       ),
@@ -231,28 +239,54 @@ class _SignInState extends State<SignIn> {
                                       height: 10.0,
                                     ),
                                     SizedBox(
-// width: double.maxFinite,
                                       width: MediaQuery.of(context).size.width,
-// height: MediaQuery.of(context).size.height * 0.058,
                                       height: 60,
                                       child: ElevatedButton(
-                                        onPressed: () {
+                                        onPressed: () async {
                                           if (!phoneKey.currentState
                                               .validate()) {
                                             print("Error Format");
                                           } else {
-                                            savePref(
-                                                "20-${PhoneNumberController.text}",
-                                                "${PhoneNumberController.text}");
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EnterPassword(
-                                                  value:
-                                                      ("20-${PhoneNumberController.text}"),
-                                                ),
-                                              ),
+                                            var result = await Provider.of<
+                                                UserViewModel>(
+                                              context,
+                                              listen: false,
+                                            ).check(
+                                              "${PhoneNumberController.text}",
                                             );
+                                            if (result) {
+                                              savePref(
+                                                  "20-${PhoneNumberController.text}",
+                                                  "${PhoneNumberController.text}");
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EnterPassword(
+                                                    value:
+                                                        ("20-${PhoneNumberController.text}"),
+                                                  ),
+                                                ),
+                                              );
+                                            } else {
+                                              savePref(
+                                                  "20-${PhoneNumberController.text}",
+                                                  "${PhoneNumberController.text}");
+                                              Fluttertoast.showToast(
+                                                msg: "User not found",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.grey,
+                                                textColor: Colors.white,
+                                                fontSize: 16.0,
+                                              );
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SignUp(),
+                                                ),
+                                              );
+                                            }
                                           }
                                         },
                                         style: ButtonStyle(
@@ -314,7 +348,9 @@ class _SignInState extends State<SignIn> {
                                                     right: 20,
                                                     left: 7.0,
                                                   ),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    _login();
+                                                  },
                                                   child: new Row(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
@@ -452,18 +488,12 @@ class _SignInState extends State<SignIn> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
                               Padding(
                                 padding: EdgeInsets.only(
                                     bottom: MediaQuery.of(context)
                                         .viewInsets
                                         .bottom),
                               ),
-                              // SizedBox(
-                              //   height: 20,
-                              // ),
                             ],
                           ),
                         ),
@@ -478,4 +508,84 @@ class _SignInState extends State<SignIn> {
       ),
     );
   }
+
+  Future<Null> _login() async {
+    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final FacebookAccessToken accessToken = result.accessToken;
+        _showMessage('''
+         Logged in!
+         
+         Token: ${accessToken.token}
+         User id: ${accessToken.userId}
+         Expires: ${accessToken.expires}
+         Permissions: ${accessToken.permissions}
+         Declined permissions: ${accessToken.declinedPermissions}
+         ''');
+        print("${accessToken.token}");
+        face("${accessToken.token}");
+        print("${accessToken.userId}");
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        _showMessage('Login cancelled by the user.');
+        break;
+      case FacebookLoginStatus.error:
+        _showMessage('Something went wrong with the login process.\n'
+            'Here\'s the error Facebook gave us: ${result.errorMessage}');
+        break;
+    }
+    print("Theis it the result status");
+    print(result.status);
+  }
+
+  Future<bool> face(String userID) async {
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Accept-Language": "en",
+    };
+
+    Map<String, dynamic> body = {
+      "social_type": "facebook",
+      "social_id": userID,
+      "device_name": "hello egypt",
+      "device_id": "123",
+      "language": "en",
+    };
+
+    var url = '$baseUrl/api/v1/user/auth/social-media/login';
+    Uri uri = Uri.parse(url);
+    http.Response response = await http.post(
+      uri,
+      headers: header,
+      body: body,
+    );
+    print(response.body);
+
+    if (response.statusCode == 200) {
+      print("Successfly Login with status code 200");
+    } else {
+      print("Error In Login in Facebook ");
+    }
+
+    return true;
+  }
+
+  Future<Null> _logOut() async {
+    await facebookSignIn.logOut();
+    _showMessage('Logged out.');
+  }
+
+  void _showMessage(String message) {
+    setState(
+      () {
+        _message = message;
+      },
+    );
+  }
+
+  static final FacebookLogin facebookSignIn = new FacebookLogin();
+
+  String _message = 'Log in/out by pressing the buttons below.';
 }
