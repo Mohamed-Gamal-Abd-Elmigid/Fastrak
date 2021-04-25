@@ -49,36 +49,36 @@ class _newSignInState extends State<newSignIn> {
           child: SafeArea(
             child: Container(
               alignment: Alignment.center,
-              child: Container(
-                color: Color(0xFFF9FAFF),
-                child: Column(
-                  children: [
-                    Image(
-                      image: AssetImage(
-                        'assets/logo.png',
-                      ),
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.height * 0.026,
+              color: Color(0xFFF9FAFF),
+              child: Column(
+                children: [
+                  Image(
+                    image: AssetImage(
+                      'assets/logo.png',
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.874,
-                      height: MediaQuery.of(context).size.height * 0.890,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            blurRadius: 20.0, // soften the shadow
-                            spreadRadius: 1.0,
-                          ),
-                        ],
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(20),
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    height: MediaQuery.of(context).size.height * 0.026,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.874,
+                    height: MediaQuery.of(context).size.height * 0.860,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade300,
+                          blurRadius: 20.0, // soften the shadow
+                          spreadRadius: 1.0,
                         ),
-                        color: Color(0xFFFFFFFF),
+                      ],
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
                       ),
+                      color: Color(0xFFFFFFFF),
+                    ),
+                    child: Center(
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -510,8 +510,8 @@ class _newSignInState extends State<newSignIn> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

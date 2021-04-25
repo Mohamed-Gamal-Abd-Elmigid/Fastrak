@@ -79,7 +79,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.884,
-                    height: MediaQuery.of(context).size.height * 0.820,
+                    height: MediaQuery.of(context).size.height * 0.800,
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(

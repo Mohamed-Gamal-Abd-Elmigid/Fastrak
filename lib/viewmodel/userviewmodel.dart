@@ -14,6 +14,7 @@ enum RegistrationResult { AccountCreated, EmailAlreadyTaken, PhoneAlreadyTaken }
 class UserViewModel extends ChangeNotifier {
   User currentUser;
   bool isFound;
+  String message;
 
   Future<bool> register(User myUser) async {
     bool isRegisterd;
@@ -70,8 +71,8 @@ class UserViewModel extends ChangeNotifier {
       print("We try print error without Error Type");
       var result = json.decode(response.body)["errors"][0]["message"];
 
-      print("This is Result After Printed");
       print(result);
+      message = result;
       isRegisterd = false;
     }
     notifyListeners();

@@ -14,6 +14,7 @@ import 'package:loginscreen/splashscreen.dart';
 import 'package:loginscreen/verficationcode.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'Home.dart';
 import 'validate.dart' as valid;
 import 'Services/api.dart' as api;
@@ -919,8 +920,13 @@ class _newSignUpState extends State<newSignUp> {
                                               ),
                                             );
                                           } else {
+                                            var hmm =
+                                                Provider.of<UserViewModel>(
+                                              context,
+                                              listen: false,
+                                            ).message;
                                             Fluttertoast.showToast(
-                                              msg: "Already Exist",
+                                              msg: "${hmm}",
                                               toastLength: Toast.LENGTH_SHORT,
                                               gravity: ToastGravity.BOTTOM,
                                               timeInSecForIosWeb: 1,
