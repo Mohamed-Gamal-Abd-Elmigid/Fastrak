@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:loginscreen/newLoginVerf.dart';
-import 'package:loginscreen/newSignIn.dart';
-import 'package:loginscreen/verficationcode.dart';
-import 'package:loginscreen/verficationcodelogin.dart';
+import 'package:loginscreen/authentication/newLoginVerf.dart';
+import 'package:loginscreen/authentication/newSignIn.dart';
+import 'package:loginscreen/authentication/verficationcode.dart';
+import 'package:loginscreen/authentication/verficationcodelogin.dart';
 import 'package:loginscreen/Home.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Model/user.dart';
-import 'loading.dart';
+import '../Model/user.dart';
+import '../loading.dart';
 
 class newEnterPassword extends StatefulWidget {
   String value;
@@ -252,7 +252,7 @@ class _newEnterPasswordState extends State<newEnterPassword> {
                                                   listen: false,
                                                 ).forgetPassword(
                                                   User(
-                                                    phone: forgetformat,
+                                                    phone: "20-${forgetformat}",
                                                   ),
                                                 );
                                                 setState(() {
@@ -300,7 +300,8 @@ class _newEnterPasswordState extends State<newEnterPassword> {
                                                     context,
                                                     listen: false,
                                                   ).login(
-                                                    phoneNumber: forgetformat,
+                                                    phoneNumber:
+                                                        "20-${forgetformat}",
                                                     password:
                                                         passwordController.text,
                                                   );

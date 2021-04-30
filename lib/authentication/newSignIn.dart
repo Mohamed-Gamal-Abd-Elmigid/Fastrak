@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:loginscreen/enterpassword.dart';
+import 'package:loginscreen/authentication/enterpassword.dart';
 import 'package:loginscreen/loading.dart';
-import 'package:loginscreen/newEnterPasswod.dart';
-import 'package:loginscreen/signup.dart';
-import 'package:loginscreen/splashscreen.dart';
+import 'package:loginscreen/authentication/newEnterPasswod.dart';
+import 'package:loginscreen/authentication/signup.dart';
+import 'package:loginscreen/authentication/splashscreen.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Model/user.dart';
-import 'validate.dart' as valid;
+import '../Model/user.dart';
+import '../validate.dart' as valid;
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as JSON;
@@ -259,7 +259,7 @@ class _newSignInState extends State<newSignIn> {
                                                   context,
                                                   listen: false,
                                                 ).check(
-                                                  "${PhoneNumberController.text}",
+                                                  "20-${PhoneNumberController.text}",
                                                 );
                                                 setState(() {
                                                   isLoading = false;

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loginscreen/loading.dart';
-import 'package:loginscreen/newSignIn.dart';
-import 'package:loginscreen/signin.dart';
-import 'package:loginscreen/signup.dart';
+import 'package:loginscreen/authentication/newSignIn.dart';
+import 'package:loginscreen/authentication/signin.dart';
+import 'package:loginscreen/authentication/signup.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

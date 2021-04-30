@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loginscreen/Home.dart';
-import 'package:loginscreen/newNewPassword.dart';
+import 'package:loginscreen/authentication/newNewPassword.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';

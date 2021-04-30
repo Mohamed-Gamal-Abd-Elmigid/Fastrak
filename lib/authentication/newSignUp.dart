@@ -7,17 +7,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loginscreen/Model/error.dart';
 import 'package:loginscreen/Model/user.dart';
-import 'package:loginscreen/newSignIn.dart';
-import 'package:loginscreen/newSignUpVerf.dart';
-import 'package:loginscreen/signin.dart';
-import 'package:loginscreen/splashscreen.dart';
-import 'package:loginscreen/verficationcode.dart';
+import 'package:loginscreen/authentication/newSignIn.dart';
+import 'package:loginscreen/authentication/newSignUpVerf.dart';
+import 'package:loginscreen/authentication/signin.dart';
+import 'package:loginscreen/authentication/splashscreen.dart';
+import 'package:loginscreen/authentication/verficationcode.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
-import 'Home.dart';
-import 'validate.dart' as valid;
-import 'Services/api.dart' as api;
+import '../Home.dart';
+import '../validate.dart' as valid;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class newSignUp extends StatefulWidget {

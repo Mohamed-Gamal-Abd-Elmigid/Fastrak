@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:loginscreen/newSignUp.dart';
-import 'package:loginscreen/onBording.dart';
-import 'package:loginscreen/signin.dart';
-import 'package:loginscreen/signup.dart';
+import 'package:loginscreen/authentication/newSignUp.dart';
+import 'package:loginscreen/authentication/onBording.dart';
+import 'package:loginscreen/authentication/signin.dart';
+import 'package:loginscreen/authentication/signup.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
 class splashScreen extends StatefulWidget {

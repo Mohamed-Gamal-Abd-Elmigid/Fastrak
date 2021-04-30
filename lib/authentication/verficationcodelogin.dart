@@ -2,58 +2,42 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:loginscreen/Home.dart';
-import 'package:loginscreen/newpassword.dart';
-import 'package:loginscreen/splashscreen.dart';
+import 'package:loginscreen/authentication/newpassword.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:splashscreen/splashscreen.dart';
 
-class VerficationCode extends StatefulWidget {
-  String phoneNumber;
-  String password;
-  VerficationCode({this.phoneNumber, this.password});
+class loginVerficationCode extends StatefulWidget {
   @override
-  _VerficationCodeState createState() => _VerficationCodeState();
+  _loginVerficationCodeState createState() => _loginVerficationCodeState();
 }
 
-class _VerficationCodeState extends State<VerficationCode>
-    with SingleTickerProviderStateMixin {
-  String phoneNumber;
-  String password;
-
-  _VerficationCodeState({this.phoneNumber, this.password});
-
-  final otpKey = GlobalKey<FormState>();
-
+class _loginVerficationCodeState extends State<loginVerficationCode> {
   TextEditingController firstNumber = TextEditingController();
   TextEditingController secondNumber = TextEditingController();
   TextEditingController thirdNumber = TextEditingController();
   TextEditingController fourNumber = TextEditingController();
   TextEditingController fiveNumber = TextEditingController();
-  // AnimationController _timerController;
-  Animation _animation;
+
   FocusNode pin2FocusNode;
   FocusNode pin3FocusNode;
   FocusNode pin4FocusNode;
   FocusNode pin5FocusNode;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+  String forgetformat;
+  String phone;
 
-    startTimer();
-    getPref();
-    pin2FocusNode = FocusNode();
-    pin3FocusNode = FocusNode();
-    pin4FocusNode = FocusNode();
-    pin5FocusNode = FocusNode();
+  final otpKey = GlobalKey<FormState>();
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    forgetformat = preferences.getString("forgetformat");
+    phone = preferences.getString("phone");
+    print("Phone From Verfication is ${phone} ");
   }
 
   Timer _timer;
-  int _start = 20;
+  int _start = 40;
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
@@ -92,12 +76,24 @@ class _VerficationCodeState extends State<VerficationCode>
     );
   }
 
-  clearPin() {}
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    startTimer();
+
+    getPref();
+    pin2FocusNode = FocusNode();
+    pin3FocusNode = FocusNode();
+    pin4FocusNode = FocusNode();
+    pin5FocusNode = FocusNode();
+  }
 
   @override
   void dispose() {
     // TODO: implement dispose
     _timer.cancel();
+
     pin2FocusNode.dispose();
     pin3FocusNode.dispose();
     pin4FocusNode.dispose();
@@ -293,25 +289,8 @@ class _VerficationCodeState extends State<VerficationCode>
     );
   }
 
-  String phone;
-
-  String token;
-
-  getPref() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    phone = preferences.getString("phone");
-    token = preferences.getString("token");
-    print("Token From Verfication  OTP Code ");
-    print(token);
-    print("----------------");
-  }
-
   @override
   Widget build(BuildContext context) {
-    final phoneKey = GlobalKey<FormState>();
-
-    String value;
-
     var _blankFocusNode = new FocusNode();
 
     return MaterialApp(
@@ -340,7 +319,7 @@ class _VerficationCodeState extends State<VerficationCode>
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.884,
-                      height: MediaQuery.of(context).size.height * 0.760,
+                      height: MediaQuery.of(context).size.height * 0.820,
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -360,7 +339,7 @@ class _VerficationCodeState extends State<VerficationCode>
                           children: [
                             Container(
                               padding: EdgeInsets.only(
-                                top: 25,
+                                top: 35,
                                 left: 25,
                                 right: 25,
                                 bottom: 15,
@@ -402,7 +381,7 @@ class _VerficationCodeState extends State<VerficationCode>
                                     right: 10,
                                   ),
                                   child: Text(
-                                    'Code has been sent to ${phoneNumber}',
+                                    'Code has been sent to ${forgetformat}',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 14,
@@ -429,23 +408,18 @@ class _VerficationCodeState extends State<VerficationCode>
                                         fontSize: 18,
                                       ),
                                     ),
-                                    GestureDetector(
+                                    InkWell(
                                       onTap: () {
-                                        print("HEllo");
                                         startNewTimer();
-                                        Provider.of<UserViewModel>(
-                                          context,
-                                          listen: false,
-                                        ).resendOtp(token);
                                       },
                                       child: Text(
                                         " Resend",
                                         style: TextStyle(
                                           color: Color(0xFF0FFCE93D8),
-                                          fontSize: 26,
+                                          fontSize: 16,
                                         ),
                                       ),
-                                    ),
+                                    )
                                   ],
                                 ),
                                 Padding(
@@ -457,29 +431,27 @@ class _VerficationCodeState extends State<VerficationCode>
                                 ),
                               ],
                             ),
-
+                            SizedBox(
+                              height: 20,
+                            ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width / 1.7,
                               height: 60,
                               child: ElevatedButton(
                                 onPressed: () async {
+                                  var sendOTP =
+                                      "${firstNumber.text}${secondNumber.text}${thirdNumber.text}${fourNumber.text}${fiveNumber.text}";
                                   if (!otpKey.currentState.validate()) {
-                                    print("Error Format");
+                                    print("Error in Validation");
                                   } else {
-                                    var sendOTP =
-                                        "${firstNumber.text}${secondNumber.text}${thirdNumber.text}${fourNumber.text}${fiveNumber.text}";
-
                                     bool result =
                                         await Provider.of<UserViewModel>(
                                       context,
                                       listen: false,
-                                    ).OTP(
-                                      "123456",
-                                      token,
-                                    );
+                                    ).confirmUserCode(forgetformat, "123456");
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) => Home(),
+                                        builder: (context) => NewPassword(),
                                       ),
                                     );
                                   }
@@ -505,17 +477,13 @@ class _VerficationCodeState extends State<VerficationCode>
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: 10,
                             ),
-
                             Padding(
                               padding: EdgeInsets.only(
                                   bottom:
                                       MediaQuery.of(context).viewInsets.bottom),
                             ),
-                            // SizedBox(
-                            //   height: 20,
-                            // ),
                           ],
                         ),
                       ),

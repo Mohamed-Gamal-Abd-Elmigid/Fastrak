@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:loginscreen/verficationcode.dart';
-import 'package:loginscreen/verficationcodelogin.dart';
+import 'package:loginscreen/authentication/verficationcode.dart';
+import 'package:loginscreen/authentication/verficationcodelogin.dart';
 import 'package:loginscreen/Home.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'Model/user.dart';
+import '../Model/user.dart';
 
 class EnterPassword extends StatefulWidget {
   String value;

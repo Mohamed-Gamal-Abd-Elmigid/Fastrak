@@ -1,7 +1,7 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
-import 'package:loginscreen/signin.dart';
-import 'package:loginscreen/signup.dart';
+import 'package:loginscreen/authentication/signin.dart';
+import 'package:loginscreen/authentication/signup.dart';
 
 class OnBoarding extends StatefulWidget {
   @override

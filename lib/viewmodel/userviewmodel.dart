@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:loginscreen/Model/error.dart';
+import 'package:loginscreen/Model/notification.dart';
 import 'package:loginscreen/Model/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -388,4 +389,51 @@ class UserViewModel extends ChangeNotifier {
   //   _showMessage('Logged out.');
   // }
 
+  Future<List<NotificationOne>> Notifications(String token) async {
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Authorization": "Bearer  ${token}",
+    };
+
+    var url = '$baseUrl/api/v1/app/notifications?page=1';
+    Uri uri = Uri.parse(url);
+    http.Response response = await http.get(
+      uri,
+      headers: header,
+    );
+
+    List<NotificationOne> test = [];
+    List result;
+
+    var end;
+
+    if (response.statusCode == 200) {
+      // print(response.body);
+
+      print(" Test Notifications");
+      result = json.decode(response.body)["data"]["notifications"];
+      test = result.map((item) {
+        // print(jsonEncode(NotificationOne.fromJson(item)));
+        return NotificationOne.fromJson(item);
+      }).toList() as List<NotificationOne>;
+
+      print(result);
+      print("After TestWork");
+
+      // print(NotificationOne.fromJson(jsonDecode(response.body)));
+      print("After Fix");
+      // NotificationOne.fromJson(
+      //     json.decode(response.body)["data"]["notifications"]);
+      // print(response.statusCode);
+    } else {
+      print("Come From Error ");
+      print(response.body);
+      print(response.statusCode);
+      // isFound = false;
+    }
+    notifyListeners();
+    print("Result Before Return");
+    return test;
+  }
 }

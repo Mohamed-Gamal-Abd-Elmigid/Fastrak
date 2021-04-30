@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:loginscreen/enterpassword.dart';
-import 'package:loginscreen/loading.dart';
-import 'package:loginscreen/newEnterPasswod.dart';
+import 'package:loginscreen/authentication/enterpassword.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class newNewPassword extends StatefulWidget {
+class NewPassword extends StatefulWidget {
   @override
-  _newNewPasswordState createState() => _newNewPasswordState();
+  _NewPasswordState createState() => _NewPasswordState();
 }
 
-class _newNewPasswordState extends State<newNewPassword> {
+class _NewPasswordState extends State<NewPassword> {
   final passwordKey = GlobalKey<FormState>();
 
   TextEditingController PasswordController = TextEditingController();
@@ -21,8 +19,6 @@ class _newNewPasswordState extends State<newNewPassword> {
   String phone;
 
   String forgetformat;
-
-  bool isLoading = false;
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -54,7 +50,7 @@ class _newNewPasswordState extends State<newNewPassword> {
               'assets/logo.png',
             ),
             width: MediaQuery.of(context).size.width * 0.35,
-            height: MediaQuery.of(context).size.height * 0.026,
+            height: MediaQuery.of(context).size.height * 0.066,
           ),
           leading: new IconButton(
             icon: new Icon(
@@ -79,7 +75,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width * 0.884,
-                    height: MediaQuery.of(context).size.height * 0.800,
+                    height: MediaQuery.of(context).size.height * 0.820,
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -99,9 +95,9 @@ class _newNewPasswordState extends State<newNewPassword> {
                         children: [
                           Container(
                             padding: EdgeInsets.only(
-                              top: 25,
-                              left: 45,
-                              right: 45,
+                              top: 35,
+                              left: 35,
+                              right: 35,
                               bottom: 15,
                             ),
                             child: Image(
@@ -120,7 +116,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                                     style: TextStyle(
                                       fontFamily: 'SegoeUI',
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 19,
+                                      fontSize: 20,
                                     ),
                                   )),
                               SizedBox(
@@ -141,7 +137,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                              top: 15.0,
+                              top: 20.0,
                               left: 10,
                               right: 10,
                             ),
@@ -163,7 +159,6 @@ class _newNewPasswordState extends State<newNewPassword> {
                                     height: 5,
                                   ),
                                   TextFormField(
-                                    textAlignVertical: TextAlignVertical.bottom,
                                     textInputAction: TextInputAction.next,
                                     style: TextStyle(
                                       color: Colors.black,
@@ -181,7 +176,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                                         ),
                                       ),
                                       contentPadding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 10),
+                                          vertical: 20, horizontal: 20),
                                       hintText: '*************',
                                       hintStyle: TextStyle(
                                         color: Colors.grey,
@@ -210,7 +205,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                                     },
                                   ),
                                   SizedBox(
-                                    height: 10.0,
+                                    height: 20.0,
                                   ),
                                   Align(
                                     alignment: Alignment.centerLeft,
@@ -226,7 +221,6 @@ class _newNewPasswordState extends State<newNewPassword> {
                                     height: 5,
                                   ),
                                   TextFormField(
-                                    textAlignVertical: TextAlignVertical.bottom,
                                     textInputAction: TextInputAction.next,
                                     style: TextStyle(
                                       color: Colors.black,
@@ -244,7 +238,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                                         ),
                                       ),
                                       contentPadding: EdgeInsets.symmetric(
-                                          vertical: 15, horizontal: 10),
+                                          vertical: 20, horizontal: 20),
                                       hintText: '*************',
                                       hintStyle: TextStyle(
                                         color: Colors.grey,
@@ -276,19 +270,14 @@ class _newNewPasswordState extends State<newNewPassword> {
                                   SizedBox(
                                     height: 15.0,
                                   ),
-                                  isLoading ? Loading() : Container(),
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width,
-                                    height:
-                                        MediaQuery.of(context).size.height / 14,
+                                    height: 60,
                                     child: ElevatedButton(
                                       onPressed: () async {
                                         if (passwordKey.currentState
                                             .validate()) {
                                           print('Error in Forms');
-                                          setState(() {
-                                            isLoading = true;
-                                          });
                                           await Provider.of<UserViewModel>(
                                                   context,
                                                   listen: false)
@@ -296,9 +285,6 @@ class _newNewPasswordState extends State<newNewPassword> {
                                                   forgetformat,
                                                   "123456",
                                                   PasswordController.text);
-                                          setState(() {
-                                            isLoading = false;
-                                          });
                                           Fluttertoast.showToast(
                                             msg: "Password Changed",
                                             toastLength: Toast.LENGTH_SHORT,
@@ -311,7 +297,7 @@ class _newNewPasswordState extends State<newNewPassword> {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  newEnterPassword(),
+                                                  EnterPassword(),
                                             ),
                                           );
                                         } else {
