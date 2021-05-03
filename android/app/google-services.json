@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "163312080168",
+    "project_id": "fastrack-21a05",
+    "storage_bucket": "fastrack-21a05.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163312080168:android:4f704b75c4146caa982c1d",
+        "android_client_info": {
+          "package_name": "team.loginscreen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163312080168-fqg2q9on78jjpm0hkbmd39crsoam76bn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDesBGIzgdqJoIo0_A6XvKFYVXj8koMfWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163312080168-fqg2q9on78jjpm0hkbmd39crsoam76bn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "163312080168-f1bm8eu8haq6jiusjeu9obvrbaor5fm6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "team.loginscreen"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

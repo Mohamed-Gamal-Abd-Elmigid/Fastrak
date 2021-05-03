@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:loginscreen/Home.dart';
 import 'package:loginscreen/Model/notification.dart';
 
 import 'package:loginscreen/authentication/newSignIn.dart';
+import 'package:loginscreen/configMaps.dart';
 import 'package:loginscreen/notification.dart';
+import 'package:loginscreen/searchScreen.dart';
 
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';

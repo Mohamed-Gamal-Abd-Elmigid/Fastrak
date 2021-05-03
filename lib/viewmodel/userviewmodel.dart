@@ -411,18 +411,15 @@ class UserViewModel extends ChangeNotifier {
     if (response.statusCode == 200) {
       // print(response.body);
 
-      print(" Test Notifications");
+      print(" Test Notifications IS DOne");
       result = json.decode(response.body)["data"]["notifications"];
       test = result.map((item) {
         // print(jsonEncode(NotificationOne.fromJson(item)));
         return NotificationOne.fromJson(item);
       }).toList() as List<NotificationOne>;
 
-      print(result);
-      print("After TestWork");
+      // print(result);
 
-      // print(NotificationOne.fromJson(jsonDecode(response.body)));
-      print("After Fix");
       // NotificationOne.fromJson(
       //     json.decode(response.body)["data"]["notifications"]);
       // print(response.statusCode);
@@ -433,7 +430,7 @@ class UserViewModel extends ChangeNotifier {
       // isFound = false;
     }
     notifyListeners();
-    print("Result Before Return");
+
     return test;
   }
 }

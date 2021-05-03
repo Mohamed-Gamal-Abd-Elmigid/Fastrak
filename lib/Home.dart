@@ -4,9 +4,12 @@ import 'package:loginscreen/loading.dart';
 import 'package:loginscreen/authentication/newSignIn.dart';
 import 'package:loginscreen/authentication/signin.dart';
 import 'package:loginscreen/authentication/signup.dart';
+import 'package:loginscreen/pickupLocation.dart';
 import 'package:loginscreen/viewmodel/userviewmodel.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'notification.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -89,6 +92,43 @@ class _HomeState extends State<Home> {
                         style: TextStyle(
                           fontSize: 24,
                         ),
+                      ),
+                      RaisedButton(
+                        color: Colors.grey,
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => NotificationFastrak(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Notificion",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      RaisedButton(
+                        color: Colors.grey,
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => NotificationFastrak(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Location",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 100,
                       ),
                       RaisedButton(
                         color: Colors.grey,
