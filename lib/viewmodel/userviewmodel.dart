@@ -16,6 +16,7 @@ class UserViewModel extends ChangeNotifier {
   User currentUser;
   bool isFound;
   String message;
+  List<NotificationOne> mmmm = [];
 
   Future<bool> register(User myUser) async {
     bool isRegisterd;
@@ -405,14 +406,12 @@ class UserViewModel extends ChangeNotifier {
 
     List<NotificationOne> test = [];
     List result;
-
     var end;
 
     if (response.statusCode == 200) {
-      // print(response.body);
-
       print(" Test Notifications IS DOne");
       result = json.decode(response.body)["data"]["notifications"];
+
       test = result.map((item) {
         // print(jsonEncode(NotificationOne.fromJson(item)));
         return NotificationOne.fromJson(item);
@@ -429,8 +428,12 @@ class UserViewModel extends ChangeNotifier {
       print(response.statusCode);
       // isFound = false;
     }
+
+    mmmm = test;
+
     notifyListeners();
 
+    // print("THIS IS LENGHT ${test.length}");
     return test;
   }
 }

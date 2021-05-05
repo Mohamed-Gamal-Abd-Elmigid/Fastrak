@@ -149,66 +149,71 @@ class _NotificationFastrakState extends State<NotificationFastrak> {
                       padding: EdgeInsets.only(left: 5, right: 5),
                       child: isLoading
                           ? Loading()
-                          : ListView.separated(
-                              itemCount: mmmm.length,
-                              physics: ClampingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  trailing: Column(
-                                    children: [
-                                      Text(
-                                        DateFormat('jm')
-                                            .format(mmmm[index].createdAt),
-                                        style: TextStyle(
+                          : Consumer<UserViewModel>(
+                              builder: (context, value, child) {
+                                return ListView.separated(
+                                  itemCount: value.mmmm.length,
+                                  physics: ClampingScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return ListTile(
+                                      trailing: Column(
+                                        children: [
+                                          Text(
+                                            DateFormat('jm').format(
+                                                value.mmmm[index].createdAt),
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          Text(
+                                            // '${mmmm[index].createdAt}',
+                                            DateFormat('yyyy/MM/dd').format(
+                                                value.mmmm[index].createdAt),
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                            ),
+                                            // DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY,
+                                            // DateFormat.YEAR().format(tx.data),
+                                          ),
+                                        ],
+                                      ),
+                                      leading: Container(
+                                        height: 50.0,
+                                        width: 50.0,
+                                        decoration: BoxDecoration(
+                                          // image: DecorationImage(
+                                          //   image: AssetImage("assets/face.png"),
+                                          //   fit: BoxFit.cover,
+                                          // ),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
                                           color: Colors.grey,
                                         ),
                                       ),
-                                      Text(
-                                        // '${mmmm[index].createdAt}',
-                                        DateFormat('yyyy/MM/dd')
-                                            .format(mmmm[index].createdAt),
+                                      title: Text(
+                                        '${value.mmmm[index].data.title}',
+                                        // 'Notificatioin Titles',
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        // DateFormat.YEAR_ABBR_MONTH_WEEKDAY_DAY,
-                                        // DateFormat.YEAR().format(tx.data),
                                       ),
-                                    ],
-                                  ),
-                                  leading: Container(
-                                    height: 50.0,
-                                    width: 50.0,
-                                    decoration: BoxDecoration(
-                                      // image: DecorationImage(
-                                      //   image: AssetImage("assets/face.png"),
-                                      //   fit: BoxFit.cover,
-                                      // ),
-                                      borderRadius: BorderRadius.circular(15),
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  title: Text(
-                                    '${mmmm[index].data.title}',
-                                    // 'Notificatioin Titles',
-                                    style: TextStyle(
+                                      subtitle: Text(
+                                        '${value.mmmm[index].data.body}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      onTap: () {},
+                                      enabled: true,
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return Divider(
                                       color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    '${mmmm[index].data.body}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  onTap: () {},
-                                  enabled: true,
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return Divider(
-                                  color: Colors.black,
+                                    );
+                                  },
                                 );
                               },
                             ),
