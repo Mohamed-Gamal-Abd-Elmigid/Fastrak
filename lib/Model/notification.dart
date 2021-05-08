@@ -144,13 +144,17 @@ class Pagination {
   int currentPage;
   int totalPages;
 
-  factory Pagination.fromJson(Map<String, dynamic> json) => Pagination(
-        total: json["total"] == null ? null : json["total"],
-        count: json["count"] == null ? null : json["count"],
-        perPage: json["per_page"] == null ? null : json["per_page"],
-        currentPage: json["current_page"] == null ? null : json["current_page"],
-        totalPages: json["total_pages"] == null ? null : json["total_pages"],
-      );
+  factory Pagination.fromJson(Map<String, dynamic> json) {
+    print("From Pagination FAcrti");
+    print(json);
+    return Pagination(
+      total: json["total"] == null ? null : json["total"],
+      count: json["count"] == null ? null : json["count"],
+      perPage: json["per_page"] == null ? null : json["per_page"],
+      currentPage: json["current_page"] == null ? null : json["current_page"],
+      totalPages: json["total_pages"] == null ? null : json["total_pages"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "total": total == null ? null : total,

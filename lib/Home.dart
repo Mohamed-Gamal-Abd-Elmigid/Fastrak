@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => NotificationFastrak(),
+                              builder: (context) => pickUpLocations(),
                             ),
                           );
                         },

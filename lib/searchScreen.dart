@@ -11,6 +11,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  List<Marker> markers = [];
+
   TextEditingController pickUpTextFieldController = TextEditingController();
   TextEditingController dropOffTextEditingController = TextEditingController();
 
@@ -32,6 +34,8 @@ class _SearchScreenState extends State<SearchScreen> {
         desiredAccuracy: LocationAccuracy.best);
     currentPosition = position;
 
+    addMarker(position, "currpos", "You Are Here");
+
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);
 
     CameraPosition cameraPosition =
@@ -48,6 +52,21 @@ class _SearchScreenState extends State<SearchScreen> {
     location = preferences.getString("location");
     print(location);
     pickUpTextFieldController.text = location;
+  }
+
+  void addMarker(Position pos, String markerId, String markerTitle) {
+    final marker = Marker(
+        markerId: MarkerId(markerId),
+        position: LatLng(pos.latitude, pos.longitude),
+        infoWindow: InfoWindow(title: markerTitle),
+        icon: (markerId == 'currpos')
+            ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
+            : BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueOrange));
+    markers.add(marker);
+    setState(() {
+      markers = markers;
+    });
   }
 
   @override
@@ -69,6 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
             myLocationEnabled: true,
             zoomGesturesEnabled: true,
             zoomControlsEnabled: true,
+            markers: Set<Marker>.of(markers),
             onMapCreated: (GoogleMapController controller) {
               _controllerGoogleMap.complete(controller);
               newGoogleMapController = controller;

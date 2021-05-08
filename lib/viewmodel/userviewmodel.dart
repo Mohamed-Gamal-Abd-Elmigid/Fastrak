@@ -3,7 +3,11 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:loginscreen/Model/apiservice.dart';
 import 'package:loginscreen/Model/error.dart';
+import 'package:loginscreen/Model/notification.dart';
+import 'package:loginscreen/Model/notification.dart';
+import 'package:loginscreen/Model/notification.dart';
 import 'package:loginscreen/Model/notification.dart';
 import 'package:loginscreen/Model/user.dart';
 import 'package:http/http.dart' as http;
@@ -12,11 +16,71 @@ import 'package:shared_preferences/shared_preferences.dart';
 final baseUrl = 'http://3.126.221.243:8080';
 enum RegistrationResult { AccountCreated, EmailAlreadyTaken, PhoneAlreadyTaken }
 
+enum LoadMoreStatus { LOADING, STABLE }
+
 class UserViewModel extends ChangeNotifier {
+  APIService _apiService;
+  NotificationsData _dataFetcher;
+  int totalPages = 0;
+  int pageSize = 15;
+
+  List<NotificationOne> get allUsers => _dataFetcher.notifications;
+  int get totalRecords => _dataFetcher.pagination.total;
+
+  LoadMoreStatus _loadMoreStatus = LoadMoreStatus.STABLE;
+  getLoadMoreStatus() => _loadMoreStatus;
+
+  DataProvider() {
+    _initStreams();
+  }
+
+  void _initStreams() {
+    _apiService = APIService();
+    _dataFetcher = NotificationsData();
+  }
+
+  void resetStreams() {
+    _initStreams();
+  }
+
+  fetchAllUsers(pageNumber) async {
+    if ((totalPages == 0) || pageNumber <= totalPages) {
+      NotificationsData itemModel = await _apiService.getData(
+          "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDM0OTQxNWI0ZDM1ZDFlY2VhZDM0Nzk4ZjZhMTZiMmM5MmI2NGU1ZDQ0NmZjYTMzOWJhZDAxNGMyZTcxNmNiZjczNmY5MzNiNjVjZGI3NGQiLCJpYXQiOjE2MTk3MDMzOTEsIm5iZiI6MTYxOTcwMzM5MSwiZXhwIjoxNjUxMjM5MzkxLCJzdWIiOiI2ZWRjNjQwNy0wMjdmLTRlMzAtYjY4OS1jZDgxNDBiYTJmZDQiLCJzY29wZXMiOltdfQ.YL04XdOxAileorKQV3vZKTzfkoY6pO2NzlFnBFQseMO0AbuStwjoj7qwGm9n2d2_RBzKrQeo2COOxh7X4GIn2ne7KbgWLDmt8NddW4pbAlmXOqYbYa4IBPeF2cTOiCZHJ85sL7OLMUm0T5j0qnr4QfyuY5Gey0G4JAgB8CHUnjO2xmhOoutIfUecdIaY9yCdreT4sVTmgQ0TYVNOQIZD4UJvmirCnAnRqe1GLyknXqIINpTqq-SZLtdMGyWIoI9ut1ejVOBz6o2mSmASVcd0LSO3VAd-XSbFdhOaw6PJk8vtOOA0DUROmCMRIHGyoI6B6vpQ3dB2eXDFdmw3aeIv8msV_zM0_PAulaTyJt6gmc9kCf1bV-Z9dXeZUuAViZvV7LlzE8vBmcdm6K9bKnUdAsa13RgLG2hcbsW-oRAApPYX4JpKn9TW3PL5R_C5xdqiPWMR6tBG1bxuUjEvQ0TGWY6s6Gh-7xRf6YhMtLlBiPwbBYp9zP0qlwoxtandGOXcHagNIryyOX1-puwLt3weq3rpy3ENl-uCMTdn0A2ghGNJEl0sYgEQ_naNYU8rCg2XMivtrfHG_UB8zy0HYV3gjIVvTTu7ihD71kj4iS93ScgDZ3xAzchPYtJpb_hhHi9r7HAF6WLk2IaJk-i5sJDRkEayGPAAtK76iow2CfxhF9E",
+          pageNumber);
+      if (_dataFetcher.notifications == null) {
+        totalPages = ((itemModel.pagination.total - 1) / pageSize).ceil();
+        _dataFetcher = itemModel;
+      } else {
+        _dataFetcher.notifications.addAll(itemModel.notifications);
+        _dataFetcher = _dataFetcher;
+
+        // One load more is done will make it status as stable.
+        setLoadingState(LoadMoreStatus.STABLE);
+      }
+
+      notifyListeners();
+    }
+
+    if (pageNumber > totalPages) {
+      // One load more is done will make it status as stable.
+      setLoadingState(LoadMoreStatus.STABLE);
+      notifyListeners();
+    }
+  }
+
+  setLoadingState(LoadMoreStatus loadMoreStatus) {
+    _loadMoreStatus = loadMoreStatus;
+    notifyListeners();
+  }
+
   User currentUser;
   bool isFound;
   String message;
   List<NotificationOne> mmmm = [];
+  int page = 1;
+
+  List<Pagination> yyyy = [];
 
   Future<bool> register(User myUser) async {
     bool isRegisterd;
@@ -390,14 +454,20 @@ class UserViewModel extends ChangeNotifier {
   //   _showMessage('Logged out.');
   // }
 
-  Future<List<NotificationOne>> Notifications(String token) async {
+  Future<List<NotificationOne>> Notifications(
+      String token, bool refresh) async {
     Map<String, String> header = {
       "Accept": "application/json",
       "Accept-Language": "en",
       "Authorization": "Bearer  ${token}",
     };
 
-    var url = '$baseUrl/api/v1/app/notifications?page=1';
+    if (refresh) {
+      mmmm = [];
+      page = 1;
+    }
+
+    var url = '$baseUrl/api/v1/app/notifications?page=$page';
     Uri uri = Uri.parse(url);
     http.Response response = await http.get(
       uri,
@@ -406,10 +476,10 @@ class UserViewModel extends ChangeNotifier {
 
     List<NotificationOne> test = [];
     List result;
-    var end;
 
     if (response.statusCode == 200) {
       print(" Test Notifications IS DOne");
+
       result = json.decode(response.body)["data"]["notifications"];
 
       test = result.map((item) {
@@ -428,12 +498,49 @@ class UserViewModel extends ChangeNotifier {
       print(response.statusCode);
       // isFound = false;
     }
+    mmmm.addAll(test);
 
-    mmmm = test;
+    if (result.length != 0) {
+      print("From REfresh What ");
+      page++;
+    }
 
     notifyListeners();
 
     // print("THIS IS LENGHT ${test.length}");
+    return test;
+  }
+
+  Future<List<Pagination>> pagination(String token, int pageNumber) async {
+    Map<String, String> header = {
+      "Accept": "application/json",
+      "Accept-Language": "en",
+      "Authorization": "Bearer  ${token}",
+    };
+
+    var url = '$baseUrl/api/v1/app/notifications?page=${pageNumber}';
+    Uri uri = Uri.parse(url);
+    http.Response response = await http.get(
+      uri,
+      headers: header,
+    );
+
+    var result;
+    List<Pagination> test = [];
+    if (response.statusCode == 200) {
+      print(" Test Pagination Status Code 200");
+      result = json.decode(response.body)["data"]['pagination'];
+      print(result);
+    } else {
+      print("Come From Error ");
+      print(response.body);
+      print(response.statusCode);
+      // isFound = false;
+    }
+    print("berfore Back to scoll");
+    print(result);
+    notifyListeners();
+
     return test;
   }
 }
